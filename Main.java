@@ -1,6 +1,6 @@
 //Language: Java
-//Programmers: Matthew Engrave, Gene Choi, Marielle Koffi
-//22 Sep 2023
+//Programmers: Silvia Matthews, Gene Choi, Marielle Koffi
+//3 Oct 2023
 //CMP SCI 4500
 
 //This program plays a game with two "Person" entities, placing them at the southwest and northwest corners
