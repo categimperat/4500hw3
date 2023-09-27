@@ -83,6 +83,7 @@ public class Main {
     private static int[] experiment2DPM = new int[3];
     private static int[] experiment3Protocols = { 4, 4, 8, 8 };
     private static int[] experiment3DMR = new int[3];
+    private static final int INFILESIZE = 6;
 
 
     //This function takes the input file and makes sure it's valid, and assigns each of the values
@@ -95,13 +96,13 @@ public class Main {
 
         try (Stream<String> fileStream = Files.lines(Paths.get("indata.txt"))) {
             int noOfLines = (int) fileStream.count();
-            if (noOfLines > 6) {
+            if (noOfLines > INFILESIZE) {
                 errors.add("Input file contains too many lines.");
             }
         }
 
         // Check and parse each line of input file
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= INFILESIZE; i++) {
             line = br.readLine();
             String[] values;
 
