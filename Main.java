@@ -48,7 +48,8 @@ class Person {
     }
 }
 
-//This is a class that creates an object that holds each repetition's of each experiment's data.
+// This is a class that creates an object that holds each repetition's of each
+// experiment's data.
 class ExperimentData {
     int Dimension;
     int maxMoves;
@@ -59,7 +60,7 @@ class ExperimentData {
     double averageMoves;
 
     public ExperimentData(int dimension, int maxMoves, int repetitions, int protocol, double lowMoves, double highMoves,
-                          double averageMoves) {
+            double averageMoves) {
         Dimension = dimension;
         this.maxMoves = maxMoves;
         this.repetitions = repetitions;
@@ -72,8 +73,9 @@ class ExperimentData {
 
 public class Main {
 
-    //Here we define the data structures that are integral to the experiments.  The first 3 hold the results of the experiments,
-    //Then the next 6 are what hold the parameters that we get from the input file.
+    // Here we define the data structures that are integral to the experiments. The
+    // first 3 hold the results of the experiments,
+    // Then the next 6 are what hold the parameters that we get from the input file.
     private static List<Double> resultsExp1 = new ArrayList<>();
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
@@ -85,9 +87,9 @@ public class Main {
     private static int[] experiment3DMR = new int[3];
     private static final int INFILESIZE = 6;
 
-
-    //This function takes the input file and makes sure it's valid, and assigns each of the values
-    //to its appropriate place in our data structure.
+    // This function takes the input file and makes sure it's valid, and assigns
+    // each of the values
+    // to its appropriate place in our data structure.
     private static void parseInput() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("indata.txt"));
 
@@ -156,7 +158,8 @@ public class Main {
                         errors.add("Line " + i + " contains an illegal character.");
                         break;
                     } else {
-                        //I tried using switch statements here but for some reason they would repeatedly be tripped every loop.
+                        // I tried using switch statements here but for some reason they would
+                        // repeatedly be tripped every loop.
                         if (j == 0) {
                             if ((Integer.parseInt(values[0]) != 4) && (Integer.parseInt(values[0]) != 8)) {
                                 errors.add("Line " + i + " contains an incorrect protocol code.");
@@ -294,8 +297,7 @@ public class Main {
         br.close();
 
         // print any problematic lines, if there are any.
-        if (!errors.isEmpty())
-        {
+        if (!errors.isEmpty()) {
             System.out.println(errors.size() + " error(s) found:");
             for (String error : errors) {
                 System.out.println(error);
@@ -306,10 +308,14 @@ public class Main {
         }
     }
 
-    // Function to move the person, protocol 4 or 8.  If it's protocol 4 it picks north, east, south, or west
-    // and tries to make a move.  If it fails it goes to the next turn.  Protocol 8 gets compound directions,
-    // so the random number is from 0-7 instead of 0-3 like protocol 4.  It also checks at the end if it's
-    // protocol 8 and hasn't made a move, it will call the move function again until it makes a move.
+    // Function to move the person, protocol 4 or 8. If it's protocol 4 it picks
+    // north, east, south, or west
+    // and tries to make a move. If it fails it goes to the next turn. Protocol 8
+    // gets compound directions,
+    // so the random number is from 0-7 instead of 0-3 like protocol 4. It also
+    // checks at the end if it's
+    // protocol 8 and hasn't made a move, it will call the move function again until
+    // it makes a move.
     private static void move(Person person, int protocol, int Dimension) {
         Person temp = new Person(person.xCoordinate, person.yCoordinate);
         Random rand = new Random();
@@ -397,7 +403,8 @@ public class Main {
             return counter;
     }
 
-    // This function runs the experiment many times depending on the repetitions and logs the outcome into a data list.
+    // This function runs the experiment many times depending on the repetitions and
+    // logs the outcome into a data list.
     private static List<Integer> experiment(int repetitions, int Dimension, int maxMoves, int protocol) {
         List<Integer> data = new ArrayList<>();
         for (int i = 0; i < repetitions; i++) {
@@ -465,7 +472,8 @@ public class Main {
                 "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
 
         for (int i = 0; i < 5; i++) {
-            writer.printf("| %-12d | %-12d | %-13d | %-10d | %-12.0f | %-12.0f | %-11.2f |\n", experiment2[i].repetitions,
+            writer.printf("| %-12d | %-12d | %-13d | %-10d | %-12.0f | %-12.0f | %-11.2f |\n",
+                    experiment2[i].repetitions,
                     experiment2[i].maxMoves, experiment2[i].Dimension, experiment2[i].protocol,
                     experiment2[i].lowMoves, experiment2[i].highMoves, experiment2[i].averageMoves);
             writer.println(
@@ -507,7 +515,8 @@ public class Main {
         parseInput();
         List<Integer> data = new ArrayList<>();
 
-        // Running experiment 1 and logging the calculations to a new results data structure.
+        // Running experiment 1 and logging the calculations to a new results data
+        // structure.
         for (int i = 0; i < 5; i++) {
             data = experiment(experiment1PMR[2], experiment1Dimensions[i], experiment1PMR[1], experiment1PMR[0]);
             low = Collections.min(data);
@@ -518,7 +527,8 @@ public class Main {
             resultsExp1.add(average);
         }
 
-        // Running Experiment 2 and logging the calculations to a new results data structure.
+        // Running Experiment 2 and logging the calculations to a new results data
+        // structure.
         for (int i = 0; i < 5; i++) {
             data = experiment(experiment2Reps[i], experiment2DPM[0], experiment2DPM[2], experiment2DPM[1]);
             low = Collections.min(data);
@@ -529,7 +539,8 @@ public class Main {
             resultsExp2.add(average);
         }
 
-        // Running Experiment 3 and logging the calculations to a new results data structure.
+        // Running Experiment 3 and logging the calculations to a new results data
+        // structure.
         for (int i = 0; i < 4; i++) {
             data = experiment(experiment3DMR[2], experiment3DMR[0], experiment3DMR[1], experiment3Protocols[i]);
             low = Collections.min(data);
