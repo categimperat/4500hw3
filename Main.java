@@ -559,7 +559,51 @@ public class Main {
         writer.close();
     }
 
+public class BarGraph {
+    public static void generateBarGraph(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
+            throws IOException {
+        // Check if the number of x and y coordinates match
+        if (xCoordinates.size() != yCoordinates.size()) {
+            System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
+            System.exit(1);
+        }
+
+        // Check if xCoordinates are in ascending order
+        for (int i = 1; i < xCoordinates.size(); i++) {
+            if (xCoordinates.get(i) <= xCoordinates.get(i - 1)) {
+                System.err.println("Error: xCoordinates must be in ascending order.");
+                System.exit(1);
+            }
+        }
+
+        // Determine the maximum value in yCoordinates
+        int yMax = yCoordinates.stream().max(Integer::compare).orElse(0);
+
+        // Open the output file
+        PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
+
+        // Generate the bar graph
+        for (int i = 0; i < xCoordinates.size(); i++) {
+            int x = xCoordinates.get(i);
+            int y = yCoordinates.get(i);
+            int yGraph = Math.round((100 * (float) y / yMax));
+
+            // Print x, separator, and stars based on yGraph value
+            writer.printf("%d, |%s%n", x, "*".repeat(yGraph));
+        }
+
+        // Close the output file
+        writer.close();
+    }
+
     public static void main(String[] args) throws IOException {
+        List<Integer> xCoordinates = List.of(1, 2, 3, 4, 5); // Example xCoordinates
+        List<Integer> yCoordinates = List.of(10, 20, 35, 15, 30); // Example yCoordinates
+        String outputFile = “outdata.txt"; // Output file name
+
+        generateBarGraph(xCoordinates, yCoordinates, outputFile);
+    }
+}    public static void main(String[] args) throws IOException {
         System.out
                 .println("The program takes an input file which describes the parameters of 3 different experiments.\n"
                         +
