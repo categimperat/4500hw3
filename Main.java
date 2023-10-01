@@ -83,6 +83,7 @@ public class Main {
     private static List<Double> resultsExp1 = new ArrayList<>();
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
+
     private static String[] experiment1Independent = new String[14];
     private static String[] experiment1Fix1 = new String[3];
     private static String[] experiment1Fix2 = new String[3];
@@ -497,100 +498,46 @@ public class Main {
 
         // write gets results of experiments and writes them to a file
         PrintWriter writer = new PrintWriter(new FileWriter("outdata.txt"));
-        System.out.println("Generating results...");
-        writer.println(
-                "Experiment #1 changes the dimensions of the grid. Other variables are held constant.");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        writer.println(
-                "|              |  Max Number  |               |            |    Lowest    |    Highest   |    Average  |");
-        writer.println(
-                "|  Dimensions  |   of Moves   |  Repetitions  |  Protocol  |  # of moves  |  # of moves  |  # of moves |");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        for (int i = 0; i < 5; i++) {
-            writer.printf("| %-12d | %-12d | %-13d | %-10d | %-12.0f | %-12.0f | %-11.2f |\n", experiment1[i].dimension,
-                    experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
-                    experiment1[i].lowMoves, experiment1[i].highMoves, experiment1[i].averageMoves);
-            writer.println(
-                    "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        }
-        writer.println(
-                "Experiment #2 changes the number of wanderings (repeats) on each row. Other variables are held\r\n" + //
-                        "constant.");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        writer.println(
-                "|              |  Max Number  |               |            |    Lowest    |    Highest   |    Average  |");
-        writer.println(
-                "|  Dimensions  |   of Moves   |  Repetitions  |  Protocol  |  # of moves  |  # of moves  |  # of moves |");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-
-        for (int i = 0; i < 5; i++) {
-            writer.printf("| %-12d | %-12d | %-13d | %-10d | %-12.0f | %-12.0f | %-11.2f |\n", experiment2[i].dimension,
-                    experiment2[i].maxMoves, experiment2[i].repetitions, experiment2[i].protocol,
-                    experiment2[i].lowMoves, experiment2[i].highMoves, experiment2[i].averageMoves);
-            writer.println(
-                    "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        }
-        writer.println(
-                "Experiment #3 changes the protocols. Other variables are held constant.");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        writer.println(
-                "|              |  Max Number  |               |            |    Lowest    |    Highest   |    Average  |");
-        writer.println(
-                "|  Dimensions  |   of Moves   |  Repetitions  |  Protocol  |  # of moves  |  # of moves  |  # of moves |");
-        writer.println(
-                "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        for (int i = 0; i < 4; i++) {
-            writer.printf("| %-12d | %-12d | %-13d | %-10d | %-12.0f | %-12.0f | %-11.2f |\n", experiment3[i].dimension,
-                    experiment3[i].maxMoves, experiment3[i].repetitions, experiment3[i].protocol,
-                    experiment3[i].lowMoves, experiment3[i].highMoves, experiment3[i].averageMoves);
-            writer.println(
-                    "*--------------*--------------*---------------*------------*--------------*--------------*-------------*");
-        }
+        
         System.out.println("Results written to outdata.txt.");
         writer.close();
     }
 
-    public class BarGraph {
-        public static void generateBarGraph(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
-                throws IOException {
-            // Check if the number of x and y coordinates match
-            if (xCoordinates.size() != yCoordinates.size()) {
-                System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
+    public static void generateBarGraph(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
+            throws IOException {
+        // Check if the number of x and y coordinates match
+        if (xCoordinates.size() != yCoordinates.size()) {
+            System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
+            System.exit(1);
+        }
+
+        // Check if xCoordinates are in ascending order
+        for (int i = 1; i < xCoordinates.size(); i++) {
+            if (xCoordinates.get(i) <= xCoordinates.get(i - 1)) {
+                System.err.println("Error: xCoordinates must be in ascending order.");
                 System.exit(1);
             }
-
-            // Check if xCoordinates are in ascending order
-            for (int i = 1; i < xCoordinates.size(); i++) {
-                if (xCoordinates.get(i) <= xCoordinates.get(i - 1)) {
-                    System.err.println("Error: xCoordinates must be in ascending order.");
-                    System.exit(1);
-                }
-            }
-
-            // Determine the maximum value in yCoordinates
-            int yMax = yCoordinates.stream().max(Integer::compare).orElse(0);
-
-            // Open the output file
-            PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
-
-            // Generate the bar graph
-            for (int i = 0; i < xCoordinates.size(); i++) {
-                int x = xCoordinates.get(i);
-                int y = yCoordinates.get(i);
-                int yGraph = Math.round((100 * (float) y / yMax));
-
-                // Print x, separator, and stars based on yGraph value
-                writer.printf("%d, |%s%n", x, "*".repeat(yGraph));
-            }
-
-            // Close the output file
-            writer.close();
         }
+
+        // Determine the maximum value in yCoordinates
+        int yMax = yCoordinates.stream().max(Integer::compare).orElse(0);
+
+        // Open the output file
+        PrintWriter writer = new PrintWriter(new FileWriter(outputFile));
+
+        // Generate the bar graph
+        for (int i = 0; i < xCoordinates.size(); i++) {
+            int x = xCoordinates.get(i);
+            int y = yCoordinates.get(i);
+            int yGraph = Math.round((100 * (float) y / yMax));
+
+            // Print x, separator, and stars based on yGraph value
+            writer.printf("%d, |%s%n", x, "*".repeat(yGraph));
+        }
+
+        // Close the output file
+        writer.close();
+    }
 
     public static void main(String[] args) throws IOException {
         System.out
