@@ -118,7 +118,7 @@ public class Main {
             if (noOfLines > 15) {
                 errors.add("Input file contains too many lines of data.");
             }else if (noOfLines < 5) {
-                errors.add("Input file contains less five lines of data.")
+                errors.add("Input file contains less five lines of data.");
             }
         }
 
