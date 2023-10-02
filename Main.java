@@ -477,17 +477,17 @@ public class Main {
 
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
-    private static void outputGenerator() throws IOException {
-
+    private static void outputGenerator(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
+            throws IOException {
+        if (xCoordinates.size() != yCoordinates.size()) {
+            System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
+            System.exit(1);
+        }
     }
 
     public static void generateBarGraph(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
             throws IOException {
         // Check if the number of x and y coordinates match
-        if (xCoordinates.size() != yCoordinates.size()) {
-            System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
-            System.exit(1);
-        }
 
         // Check if xCoordinates are in ascending order
         for (int i = 1; i < xCoordinates.size(); i++) {
@@ -532,38 +532,44 @@ public class Main {
         parseInput();
         List<Integer> data = new ArrayList<>();
 
-        // Running experiment 1
-        for (int i = 0; i < 5; i++) {
-            data = experiment(experiment1PMR[2], experiment1Dimensions[i], experiment1PMR[1], experiment1PMR[0]);
-            low = Collections.min(data);
-            high = Collections.max(data);
-            average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-            resultsExp1.add(low);
-            resultsExp1.add(high);
-            resultsExp1.add(average);
-        }
+        // // Running experiment 1
+        // for (int i = 0; i < 5; i++) {
+        // data = experiment(experiment1PMR[2], experiment1Dimensions[i],
+        // experiment1PMR[1], experiment1PMR[0]);
+        // low = Collections.min(data);
+        // high = Collections.max(data);
+        // average =
+        // data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+        // resultsExp1.add(low);
+        // resultsExp1.add(high);
+        // resultsExp1.add(average);
+        // }
 
-        // Running Experiment 2
-        for (int i = 0; i < 5; i++) {
-            data = experiment(experiment2Reps[i], experiment2DPM[0], experiment2DPM[2], experiment2DPM[1]);
-            low = Collections.min(data);
-            high = Collections.max(data);
-            average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-            resultsExp2.add(low);
-            resultsExp2.add(high);
-            resultsExp2.add(average);
-        }
+        // // Running Experiment 2
+        // for (int i = 0; i < 5; i++) {
+        // data = experiment(experiment2Reps[i], experiment2DPM[0], experiment2DPM[2],
+        // experiment2DPM[1]);
+        // low = Collections.min(data);
+        // high = Collections.max(data);
+        // average =
+        // data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+        // resultsExp2.add(low);
+        // resultsExp2.add(high);
+        // resultsExp2.add(average);
+        // }
 
-        // Running Experiment 3
-        for (int i = 0; i < 4; i++) {
-            data = experiment(experiment3DMR[2], experiment3DMR[0], experiment3DMR[1], experiment3Protocols[i]);
-            low = Collections.min(data);
-            high = Collections.max(data);
-            average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-            resultsExp3.add(low);
-            resultsExp3.add(high);
-            resultsExp3.add(average);
-        }
+        // // Running Experiment 3
+        // for (int i = 0; i < 4; i++) {
+        // data = experiment(experiment3DMR[2], experiment3DMR[0], experiment3DMR[1],
+        // experiment3Protocols[i]);
+        // low = Collections.min(data);
+        // high = Collections.max(data);
+        // average =
+        // data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+        // resultsExp3.add(low);
+        // resultsExp3.add(high);
+        // resultsExp3.add(average);
+        // }
 
         outputGenerator();
     }
