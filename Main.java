@@ -147,7 +147,7 @@ public class Main {
                 case 6:
                 case 11:
                     if (values.length > 3 && values.length < 15) {
-                         if ( values[0].eqaual("independent") && (values[1].equal("D") || values[1].equal("M") || values[1].equal("R") || values[1].equal("P")) ) {
+                         if ( values[0].equals("independent") && (values[1].equals("D") || values[1].equals("M") || values[1].equals("R") || values[1].equals("P")) ) {
                               for (int j = 2; j < values.length; j++) {
                                   if (values[j] < values[j+1]) {
                                        //Add data into its relative line
@@ -194,7 +194,7 @@ public class Main {
                 case 13:
                 case 14:
                     if ( values.length == 3 ) {
-                          if (values[0].equal("fixed") && (values[1].equal("D") || values[1].equal("M") || values[1].equal("R") || values[1].equal("P"))) {
+                          if (values[0].equals("fixed") && (values[1].equals("D") || values[1].equals("M") || values[1].equals("R") || values[1].equals("P"))) {
                               //Add data into its relative line
                               //Data for experiment 1
                               if (i == 2) {
@@ -258,7 +258,7 @@ public class Main {
                 case 10:
                 case 15:
                     if ( values.length == 2) {
-                        if (values[0].equal("dependent") && (values[1].equal("L") || values[1].equal("H") || values[1].equal("A")) ){
+                        if (values[0].equals("dependent") && (values[1].equals("L") || values[1].equals("H") || values[1].equals("A")) ){
                             //Add data into its relative line
                             //Data for experiment 1
                             if (i == 5) {
@@ -290,62 +290,62 @@ public class Main {
         
         //Find which line is the exact D, P, M, R
         //First, check if the second element of the first four lines each experiment is not the same.
-        if ( !experiment1Independent[1].equal(experiment1Fix1[1]) 
-             && !experiment1Independent[1].equal(experiment1Fix2[1]) 
-             && !experiment1Independent[1].equal(experiment1Fix3[1]) 
-             && !experiment1Fix1[1].equal(experiment1Fix2[1])
-             && !experiment1Fix1[1].equal(experiment1Fix3[1])
-             && !experiment1Fix2[1].equal(experiment1Fix3[1]) ) {
+        if ( !experiment1Independent[1].equals(experiment1Fix1[1]) 
+             && !experiment1Independent[1].equals(experiment1Fix2[1]) 
+             && !experiment1Independent[1].equals(experiment1Fix3[1]) 
+             && !experiment1Fix1[1].equals(experiment1Fix2[1])
+             && !experiment1Fix1[1].equals(experiment1Fix3[1])
+             && !experiment1Fix2[1].equals(experiment1Fix3[1]) ) {
                  //Assign experiment 1D value
-                 if (experiment1Independent[1].equal("D")) {
+                 if (experiment1Independent[1].equals("D")) {
                      for (int j = 0; j < (experiment1Independent.length - 2); j++) {
                          experiment1D[j] = Integer.parseInt(experiment1Independent[j+2]);
                      }
-                 }else if (experiment1Fix1[1].equal("D")) {
+                 }else if (experiment1Fix1[1].equals("D")) {
                      experiment1D[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[1].equal("D")) {
+                 }else if (experiment1Fix2[1].equals("D")) {
                      experiment1D[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[1].equal("D")) {
+                 }else if (experiment1Fix3[1].equals("D")) {
                      experiment1D[0] = Integer.parseInt(experiment1Fix3[2]);
                  }
                  
                  //Assign experiment 1M value 
-                 if (experiment1Independent[1].equal("M")) {
+                 if (experiment1Independent[1].equals("M")) {
                      for (int j = 0; j < (experiment1Independent.length - 2); j++) {
                          experiment1M[j] = Integer.parseInt(experiment1Independent[j+2]);
                      }
-                 }else if (experiment1Fix1[1].equal("M")) {
+                 }else if (experiment1Fix1[1].equals("M")) {
                      experiment1M[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equal("M")) {
+                 }else if (experiment1Fix2[2].equals("M")) {
                      experiment1M[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equal("M")) {
+                 }else if (experiment1Fix3[2].equals("M")) {
                      experiment1M[0] = Integer.parseInt(experiment1Fix3[2]);
                  }
                  
                  //Assign experiment 1R value 
-                 if (experiment1Independent[1].equal("R")) {
+                 if (experiment1Independent[1].equals("R")) {
                      for (int j = 0; j < (experiment1Independent.length - 2); j++) {
                          experiment1R[j] = Integer.parseInt(experiment1Independent[j+2]);
                      }
-                 }else if (experiment1Fix1[1].equal("R")) {
+                 }else if (experiment1Fix1[1].equals("R")) {
                      experiment1R[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equal("R")) {
+                 }else if (experiment1Fix2[2].equals("R")) {
                      experiment1R[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equal("R")) {
+                 }else if (experiment1Fix3[2].equals("R")) {
                      experiment1R[0] = Integer.parseInt(experiment1Fix3[2]);
                  }
                  
                  
                  //Assign experiment 1P value 
-                 if (experiment1Independent[1].equal("P")) {
+                 if (experiment1Independent[1].equals("P")) {
                      for (int j = 0; j < (experiment1Independent.length - 2); j++) {
                          experiment1P[j] = Integer.parseInt(experiment1Independent[j+2]);
                      }
-                 }else if (experiment1Fix1[1].equal("P")) {
+                 }else if (experiment1Fix1[1].equals("P")) {
                      experiment1P[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equal("P")) {
+                 }else if (experiment1Fix2[2].equals("P")) {
                      experiment1P[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equal("P")) {
+                 }else if (experiment1Fix3[2].equals("P")) {
                      experiment1P[0] = Integer.parseInt(experiment1Fix3[2]);
                  }
                  
@@ -477,30 +477,7 @@ public class Main {
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
     private static void outputGenerator() throws IOException {
-        // Packaging the results of the experiments into objects
-        ExperimentData[] experiment1 = new ExperimentData[5];
-        for (int i = 0; i < 5; i++)
-            experiment1[i] = new ExperimentData(experiment1Dimensions[i], experiment1PMR[1], experiment1PMR[2],
-                    experiment1PMR[0], resultsExp1.get((3 * i)), resultsExp1.get((3 * i) + 1),
-                    resultsExp1.get((3 * i) + 2));
 
-        ExperimentData[] experiment2 = new ExperimentData[5];
-        for (int i = 0; i < 5; i++)
-            experiment2[i] = new ExperimentData(experiment2DPM[0], experiment2DPM[2], experiment2Reps[i],
-                    experiment2DPM[1], resultsExp2.get((3 * i)), resultsExp2.get((3 * i) + 1),
-                    resultsExp2.get((3 * i) + 2));
-
-        ExperimentData[] experiment3 = new ExperimentData[4];
-        for (int i = 0; i < 4; i++)
-            experiment3[i] = new ExperimentData(experiment3DMR[0], experiment3DMR[1], experiment3DMR[2],
-                    experiment3Protocols[i], resultsExp3.get((3 * i)), resultsExp3.get((3 * i) + 1),
-                    resultsExp3.get((3 * i) + 2));
-
-        // write gets results of experiments and writes them to a file
-        PrintWriter writer = new PrintWriter(new FileWriter("outdata.txt"));
-        
-        System.out.println("Results written to outdata.txt.");
-        writer.close();
     }
 
     public static void generateBarGraph(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
