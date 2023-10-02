@@ -117,7 +117,7 @@ public class Main {
             int noOfLines = (int) fileStream.count();
             if (noOfLines > 15) {
                 errors.add("Input file contains too many lines of data.");
-            }else if (noOfLines < 5) {
+            } else if (noOfLines < 5) {
                 errors.add("Input file contains less five lines of data.");
             }
         }
@@ -127,7 +127,8 @@ public class Main {
             line = br.readLine();
             String[] values;
 
-            // check every line to see if it is null. if true, this indicates a file with 5<lines<15
+            // check every line to see if it is null. if true, this indicates a file with
+            // 5<lines<15
             // lines. if false, split line between commas.
             if (line == null) {
                 errors.add("Incomplete input file.");
@@ -147,43 +148,44 @@ public class Main {
                 case 6:
                 case 11:
                     if (values.length > 3 && values.length < 15) {
-                         if ( values[0].equals("independent") && (values[1].equals("D") || values[1].equals("M") || values[1].equals("R") || values[1].equals("P")) ) {
-                              for (int j = 2; j < values.length; j++) {
-                                  if (values[j] < values[j+1]) {
-                                        //Add data into its relative line
-                                        //Data for experiment 1
-                                        if (i == 1) {
-                                            experiment1Independent[0] = values[0];
-                                            experiment1Independent[1] = values[1];
-                                            experiment1Independent[j] = values[j];
-                                        }
-                                       
-                                        //Data for experiment 2
-                                        if (i == 6) {
-                                           experiment2Independent[0] = values[0];
-                                           experiment2Independent[1] = values[1];
-                                           experiment2Independent[j] = values[j];
-                                       }
-                                       
-                                       //Data for experiment 3
-                                       if (i == 11) {
-                                           experiment3Independent[0] = values[0];
-                                           experiment3Independent[1] = values[1];
-                                           experiment3Independent[j] = values[j];
-                                       }
-                                       
-                                  }else {
-                                      errors.add("The number should be increase in line " + i);
-                                  }
-                              }
-                              
-                         }else {
-                             errors.add("Line " + i + " contains incorrect data in the first two items.")
-                         }
-                     }else {
-                         errors.add ("Length is incorrect in line " + i);
-                     }
-                     
+                        if (values[0].equals("independent") && (values[1].equals("D") || values[1].equals("M")
+                                || values[1].equals("R") || values[1].equals("P"))) {
+                            for (int j = 2; j < values.length; j++) {
+                                if (Integer.parseInt(values[j]) < Integer.parseInt(values[j + 1])) {
+                                    // Add data into its relative line
+                                    // Data for experiment 1
+                                    if (i == 1) {
+                                        experiment1Independent[0] = values[0];
+                                        experiment1Independent[1] = values[1];
+                                        experiment1Independent[j] = values[j];
+                                    }
+
+                                    // Data for experiment 2
+                                    if (i == 6) {
+                                        experiment2Independent[0] = values[0];
+                                        experiment2Independent[1] = values[1];
+                                        experiment2Independent[j] = values[j];
+                                    }
+
+                                    // Data for experiment 3
+                                    if (i == 11) {
+                                        experiment3Independent[0] = values[0];
+                                        experiment3Independent[1] = values[1];
+                                        experiment3Independent[j] = values[j];
+                                    }
+
+                                } else {
+                                    errors.add("The number should be increase in line " + i);
+                                }
+                            }
+
+                        } else {
+                            errors.add("Line " + i + " contains incorrect data in the first two items.");
+                        }
+                    } else {
+                        errors.add("Length is incorrect in line " + i);
+                    }
+
                 case 2:
                 case 3:
                 case 4:
@@ -193,170 +195,171 @@ public class Main {
                 case 12:
                 case 13:
                 case 14:
-                    if ( values.length == 3 ) {
-                          if (values[0].equals("fixed") && (values[1].equals("D") || values[1].equals("M") || values[1].equals("R") || values[1].equals("P"))) {
-                              //Add data into its relative line
-                              //Data for experiment 1
-                              if (i == 2) {
-                                  experiment1Fix1[0] = values[0];
-                                  experiment1Fix1[1] = values[1];
-                                  experiment1Fix1[2] = values[2];
-                              }
-                              if (i == 3) {
-                                  experiment1Fix2[0] = values[0];
-                                  experiment1Fix2[1] = values[1];
-                                  experiment1Fix2[2] = values[2];
-                              }
-                              if (i == 4) {
-                                  experiment1Fix3[0] = values[0];
-                                  experiment1Fix3[1] = values[1];
-                                  experiment1Fix3[2] = values[2];
-                              }
-                              
-                              //Data for experiment 2
-                              if (i == 7) {
-                                  experiment2Fix1[0] = values[0];
-                                  experiment2Fix1[1] = values[1];
-                                  experiment2Fix1[2] = values[2];
-                              }
-                              if (i == 8) {
-                                  experiment2Fix2[0] = values[0];
-                                  experiment2Fix2[1] = values[1];
-                                  experiment2Fix2[2] = values[2];
-                              }
-                              if (i == 9) {
-                                  experiment2Fix3[0] = values[0];
-                                  experiment2Fix3[1] = values[1];
-                                  experiment2Fix3[2] = values[2];
-                              }
-                              
-                              //Data for experiment 3
-                              if (i == 12) {
-                                  experiment3Fix1[0] = values[0];
-                                  experiment3Fix1[1] = values[1];
-                                  experiment3Fix1[2] = values[2];
-                              }
-                              if (i == 13) {
-                                  experiment3Fix2[0] = values[0];
-                                  experiment3Fix2[1] = values[1];
-                                  experiment3Fix2[2] = values[2];
-                              }
-                              if (i == 14) {
-                                  experiment3Fix3[0] = values[0];
-                                  experiment3Fix3[1] = values[1];
-                                  experiment3Fix3[2] = values[2];
-                              }
-                          }else {
-                              errors.add("Line " + i + " contains incorrect data in the first two items.");
-                          }
-                              
-                     }else {
-                         errors.add("Length is incorrect in line " + i);
-                     }
-                     
+                    if (values.length == 3) {
+                        if (values[0].equals("fixed") && (values[1].equals("D") || values[1].equals("M")
+                                || values[1].equals("R") || values[1].equals("P"))) {
+                            // Add data into its relative line
+                            // Data for experiment 1
+                            if (i == 2) {
+                                experiment1Fix1[0] = values[0];
+                                experiment1Fix1[1] = values[1];
+                                experiment1Fix1[2] = values[2];
+                            }
+                            if (i == 3) {
+                                experiment1Fix2[0] = values[0];
+                                experiment1Fix2[1] = values[1];
+                                experiment1Fix2[2] = values[2];
+                            }
+                            if (i == 4) {
+                                experiment1Fix3[0] = values[0];
+                                experiment1Fix3[1] = values[1];
+                                experiment1Fix3[2] = values[2];
+                            }
+
+                            // Data for experiment 2
+                            if (i == 7) {
+                                experiment2Fix1[0] = values[0];
+                                experiment2Fix1[1] = values[1];
+                                experiment2Fix1[2] = values[2];
+                            }
+                            if (i == 8) {
+                                experiment2Fix2[0] = values[0];
+                                experiment2Fix2[1] = values[1];
+                                experiment2Fix2[2] = values[2];
+                            }
+                            if (i == 9) {
+                                experiment2Fix3[0] = values[0];
+                                experiment2Fix3[1] = values[1];
+                                experiment2Fix3[2] = values[2];
+                            }
+
+                            // Data for experiment 3
+                            if (i == 12) {
+                                experiment3Fix1[0] = values[0];
+                                experiment3Fix1[1] = values[1];
+                                experiment3Fix1[2] = values[2];
+                            }
+                            if (i == 13) {
+                                experiment3Fix2[0] = values[0];
+                                experiment3Fix2[1] = values[1];
+                                experiment3Fix2[2] = values[2];
+                            }
+                            if (i == 14) {
+                                experiment3Fix3[0] = values[0];
+                                experiment3Fix3[1] = values[1];
+                                experiment3Fix3[2] = values[2];
+                            }
+                        } else {
+                            errors.add("Line " + i + " contains incorrect data in the first two items.");
+                        }
+
+                    } else {
+                        errors.add("Length is incorrect in line " + i);
+                    }
+
                 case 5:
                 case 10:
                 case 15:
-                    if ( values.length == 2) {
-                        if (values[0].equals("dependent") && (values[1].equals("L") || values[1].equals("H") || values[1].equals("A")) ){
-                            //Add data into its relative line
-                            //Data for experiment 1
+                    if (values.length == 2) {
+                        if (values[0].equals("dependent")
+                                && (values[1].equals("L") || values[1].equals("H") || values[1].equals("A"))) {
+                            // Add data into its relative line
+                            // Data for experiment 1
                             if (i == 5) {
                                 experiment1Dependent[0] = values[0];
                                 experiment1Dependent[1] = values[1];
                             }
-                            
-                            //Data for experiment 2
+
+                            // Data for experiment 2
                             if (i == 10) {
                                 experiment2Dependent[0] = values[0];
                                 experiment2Dependent[1] = values[1];
                             }
-                            
-                            //Data for experiment 3
+
+                            // Data for experiment 3
                             if (i == 15) {
                                 experiment3Dependent[0] = values[0];
                                 experiment3Dependent[1] = values[1];
                             }
-                        }else {
-                            errors.add("Line " + i + " contains incorrect data in the first item.")
+                        } else {
+                            errors.add("Line " + i + " contains incorrect data in the first item.");
                         }
-                    }else {
+                    } else {
                         errors.add("Length is incorrect in line " + i);
                     }
-            }    
+            }
         }
-            
+
         br.close();
-        
-        //Find which line is the exact D, P, M, R
-        //First, check if the second element of the first four lines each experiment is not the same.
-        if ( !experiment1Independent[1].equals(experiment1Fix1[1]) 
-             && !experiment1Independent[1].equals(experiment1Fix2[1]) 
-             && !experiment1Independent[1].equals(experiment1Fix3[1]) 
-             && !experiment1Fix1[1].equals(experiment1Fix2[1])
-             && !experiment1Fix1[1].equals(experiment1Fix3[1])
-             && !experiment1Fix2[1].equals(experiment1Fix3[1]) ) {
-                 //Assign experiment 1D value
-                 if (experiment1Independent[1].equals("D")) {
-                     for (int j = 0; j < (experiment1Independent.length - 2); j++) {
-                         experiment1D[j] = Integer.parseInt(experiment1Independent[j+2]);
-                     }
-                 }else if (experiment1Fix1[1].equals("D")) {
-                     experiment1D[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[1].equals("D")) {
-                     experiment1D[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[1].equals("D")) {
-                     experiment1D[0] = Integer.parseInt(experiment1Fix3[2]);
-                 }
-                 
-                 //Assign experiment 1M value 
-                 if (experiment1Independent[1].equals("M")) {
-                     for (int j = 0; j < (experiment1Independent.length - 2); j++) {
-                         experiment1M[j] = Integer.parseInt(experiment1Independent[j+2]);
-                     }
-                 }else if (experiment1Fix1[1].equals("M")) {
-                     experiment1M[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equals("M")) {
-                     experiment1M[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equals("M")) {
-                     experiment1M[0] = Integer.parseInt(experiment1Fix3[2]);
-                 }
-                 
-                 //Assign experiment 1R value 
-                 if (experiment1Independent[1].equals("R")) {
-                     for (int j = 0; j < (experiment1Independent.length - 2); j++) {
-                         experiment1R[j] = Integer.parseInt(experiment1Independent[j+2]);
-                     }
-                 }else if (experiment1Fix1[1].equals("R")) {
-                     experiment1R[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equals("R")) {
-                     experiment1R[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equals("R")) {
-                     experiment1R[0] = Integer.parseInt(experiment1Fix3[2]);
-                 }
-                 
-                 
-                 //Assign experiment 1P value 
-                 if (experiment1Independent[1].equals("P")) {
-                     for (int j = 0; j < (experiment1Independent.length - 2); j++) {
-                         experiment1P[j] = Integer.parseInt(experiment1Independent[j+2]);
-                     }
-                 }else if (experiment1Fix1[1].equals("P")) {
-                     experiment1P[0] = Integer.parseInt(experiment1Fix1[2]);
-                 }else if (experiment1Fix2[2].equals("P")) {
-                     experiment1P[0] = Integer.parseInt(experiment1Fix2[2]);
-                 }else if (experiment1Fix3[2].equals("P")) {
-                     experiment1P[0] = Integer.parseInt(experiment1Fix3[2]);
-                 }
-                 
-                 //Check the range for D, M, R, or P??? Not sure if it is required
-                 
-                 //continue........
-                 
-        } else{
+
+        // Find which line is the exact D, P, M, R
+        // First, check if the second element of the first four lines each experiment is
+        // not the same.
+        if (!experiment1Independent[1].equals(experiment1Fix1[1])
+                && !experiment1Independent[1].equals(experiment1Fix2[1])
+                && !experiment1Independent[1].equals(experiment1Fix3[1])
+                && !experiment1Fix1[1].equals(experiment1Fix2[1])
+                && !experiment1Fix1[1].equals(experiment1Fix3[1])
+                && !experiment1Fix2[1].equals(experiment1Fix3[1])) {
+            // Assign experiment 1D value
+            if (experiment1Independent[1].equals("D")) {
+                for (int j = 0; j < (experiment1Independent.length - 2); j++) {
+                    experiment1D[j] = Integer.parseInt(experiment1Independent[j + 2]);
+                }
+            } else if (experiment1Fix1[1].equals("D")) {
+                experiment1D[0] = Integer.parseInt(experiment1Fix1[2]);
+            } else if (experiment1Fix2[1].equals("D")) {
+                experiment1D[0] = Integer.parseInt(experiment1Fix2[2]);
+            } else if (experiment1Fix3[1].equals("D")) {
+                experiment1D[0] = Integer.parseInt(experiment1Fix3[2]);
+            }
+
+            // Assign experiment 1M value
+            if (experiment1Independent[1].equals("M")) {
+                for (int j = 0; j < (experiment1Independent.length - 2); j++) {
+                    experiment1M[j] = Integer.parseInt(experiment1Independent[j + 2]);
+                }
+            } else if (experiment1Fix1[1].equals("M")) {
+                experiment1M[0] = Integer.parseInt(experiment1Fix1[2]);
+            } else if (experiment1Fix2[2].equals("M")) {
+                experiment1M[0] = Integer.parseInt(experiment1Fix2[2]);
+            } else if (experiment1Fix3[2].equals("M")) {
+                experiment1M[0] = Integer.parseInt(experiment1Fix3[2]);
+            }
+
+            // Assign experiment 1R value
+            if (experiment1Independent[1].equals("R")) {
+                for (int j = 0; j < (experiment1Independent.length - 2); j++) {
+                    experiment1R[j] = Integer.parseInt(experiment1Independent[j + 2]);
+                }
+            } else if (experiment1Fix1[1].equals("R")) {
+                experiment1R[0] = Integer.parseInt(experiment1Fix1[2]);
+            } else if (experiment1Fix2[2].equals("R")) {
+                experiment1R[0] = Integer.parseInt(experiment1Fix2[2]);
+            } else if (experiment1Fix3[2].equals("R")) {
+                experiment1R[0] = Integer.parseInt(experiment1Fix3[2]);
+            }
+
+            // Assign experiment 1P value
+            if (experiment1Independent[1].equals("P")) {
+                for (int j = 0; j < (experiment1Independent.length - 2); j++) {
+                    experiment1P[j] = Integer.parseInt(experiment1Independent[j + 2]);
+                }
+            } else if (experiment1Fix1[1].equals("P")) {
+                experiment1P[0] = Integer.parseInt(experiment1Fix1[2]);
+            } else if (experiment1Fix2[2].equals("P")) {
+                experiment1P[0] = Integer.parseInt(experiment1Fix2[2]);
+            } else if (experiment1Fix3[2].equals("P")) {
+                experiment1P[0] = Integer.parseInt(experiment1Fix3[2]);
+            }
+
+            // Check the range for D, M, R, or P??? Not sure if it is required
+
+            // continue........
+
+        } else {
             errors.add("The first four lines for experiment 1 should include all four of different variables i.");
         }
-        
 
         // print any problematic lines, if there are any.
         if (!errors.isEmpty()) {
@@ -368,9 +371,7 @@ public class Main {
         } else {
             System.out.println("No errors found in input file.");
         }
-        
-        
-        
+
     }
 
     // Function to move the person, protocol 4 or 8
