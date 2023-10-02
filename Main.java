@@ -150,32 +150,32 @@ public class Main {
                          if ( values[0].equals("independent") && (values[1].equals("D") || values[1].equals("M") || values[1].equals("R") || values[1].equals("P")) ) {
                               for (int j = 2; j < values.length; j++) {
                                   if (values[j] < values[j+1]) {
-                                       //Add data into its relative line
-                                       //Data for experiment 1
-                                       if (i == 1) {
-                                           experiment1Independent[0] = values[0];
-                                           experiment1Independent[1] = values[1];
-                                           experiment1Independent[j] = values[j];
-                                       }
+                                        //Add data into its relative line
+                                        //Data for experiment 1
+                                        if (i == 1) {
+                                            experiment1Independent[0] = values[0];
+                                            experiment1Independent[1] = values[1];
+                                            experiment1Independent[j] = values[j];
+                                        }
                                        
-                                       //Data for experiment 2
-                                       if (i == 6) {
-                                           experiment2Independent[0] = values[0];
-                                           experiment2Independent[1] = values[1];
-                                           experiment2Independent[j] = values[j];
-                                       }
+                                        //Data for experiment 2
+                                        if (i == 6) {
+                                            experiment2Independent[0] = values[0];
+                                            experiment2Independent[1] = values[1];
+                                            experiment2Independent[j] = values[j];
+                                        }
                                        
                                        //Data for experiment 3
-                                       if (i == 11) {
+                                        if (i == 11) {
                                            experiment3Independent[0] = values[0];
                                            experiment3Independent[1] = values[1];
                                            experiment3Independent[j] = values[j];
-                                       }
+                                        }
                                        
-                                  }else {
+                                    }else {
                                       errors.add("The number should be increase in line " + i);
-                                  }
-                              }
+                                    }
+                                }
                               
                          }else {
                              errors.add("Line " + i + " contains incorrect data in the first two items.")
