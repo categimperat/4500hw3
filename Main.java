@@ -30,7 +30,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -69,17 +71,13 @@ class ExperimentData {
 }
 
 public class Main {
-    /*
-     * private static List<Double> resultsExp1 = new ArrayList<>();
-     * private static List<Double> resultsExp2 = new ArrayList<>();
-     * private static List<Double> resultsExp3 = new ArrayList<>();
-     * private static int[] experiment1Dimensions = new int[5];
-     * private static int[] experiment1PMR = new int[3];
-     * private static int[] experiment2Reps = new int[5];
-     * private static int[] experiment2DPM = new int[3];
-     * private static int[] experiment3Protocols = { 4, 4, 8, 8 };
-     * private static int[] experiment3DMR = new int[3];
-     */
+
+    // sample xcoords/ycoords
+    // these should be replaced with dynamically populated arrayLists
+
+    private static ArrayList<Integer> xCoordinates = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+    private static ArrayList<Integer> yCoordinates = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
     private static List<Double> resultsExp1 = new ArrayList<>();
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
@@ -106,12 +104,12 @@ public class Main {
     private static String[] experiment3Fix2 = new String[3];
     private static String[] experiment3Fix3 = new String[3];
     private static String[] experiment3Dependent = new String[2];
+    private static List<String> errors = new ArrayList<>();
 
     private static void parseInput() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("indata.txt"));
 
         String line;
-        List<String> errors = new ArrayList<>();
 
         try (Stream<String> fileStream = Files.lines(Paths.get("indata.txt"))) {
             int noOfLines = (int) fileStream.count();
@@ -360,7 +358,11 @@ public class Main {
         } else {
             errors.add("The first four lines for experiment 1 should include all four of different variables i.");
         }
+        checkForErrors();
 
+    }
+
+    private static void checkForErrors() {
         // print any problematic lines, if there are any.
         if (!errors.isEmpty()) {
             System.out.println(errors.size() + " error(s) found:");
@@ -371,7 +373,6 @@ public class Main {
         } else {
             System.out.println("No errors found in input file.");
         }
-
     }
 
     // Function to move the person, protocol 4 or 8
@@ -477,12 +478,43 @@ public class Main {
 
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
-    private static void outputGenerator(List<Integer> xCoordinates, List<Integer> yCoordinates, String outputFile)
+    private static void outputGenerator(ArrayList<Integer> xCoordinates, ArrayList<Integer> yCoordinates)
             throws IOException {
+        // sample xcoords/ycoords
+
+        // Check if the number of x and y coordinates match
         if (xCoordinates.size() != yCoordinates.size()) {
-            System.err.println("Error: xCoordinates and yCoordinates must have the same number of items.");
-            System.exit(1);
+            errors.add("Error: xCoordinates and yCoordinates must have the same number of items.");
         }
+        // Check if xCoordinates are in ascending order
+        for (int i = 1; i < xCoordinates.size(); i++) {
+            if (xCoordinates.get(i) <= xCoordinates.get(i - 1)) {
+                errors.add("Error: xCoordinates must be in ascending order.");
+            }
+        }
+        // Determine the maximum value in yCoordinates
+        int yMax = yCoordinates.get(0);
+        for (int i = 0; i < yCoordinates.size(); i++) {
+            if (yCoordinates.get(i) > yMax)
+                yMax = yCoordinates.get(i);
+        }
+
+        // Open the output file
+        PrintWriter outWriter = new PrintWriter(new FileWriter("outdata.txt"));
+
+        // Generate the bar graph
+        for (int i = 0; i < xCoordinates.size(); i++) {
+            int x = xCoordinates.get(i);
+            int y = yCoordinates.get(i);
+            int yGraph = Math.round((100 * (float) y / yMax));
+
+            // Print x, separator, and stars based on yGraph value
+            outWriter.printf("%d| %s%n", x, "*".repeat(yGraph));
+        }
+
+        // Close the output file
+        outWriter.close();
+        checkForErrors();
     }
 
     public static void main(String[] args) throws IOException {
@@ -494,10 +526,8 @@ public class Main {
                         "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
                         +
                         " and average values of each experiment, then it will log those results in an output file.\n");
-        double low;
-        double high;
-        double average;
-        parseInput();
-        List<Integer> data = new ArrayList<>();
+        // parseInput();
+
+        outputGenerator(xCoordinates, yCoordinates);
     }
 }
