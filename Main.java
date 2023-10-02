@@ -160,22 +160,22 @@ public class Main {
                                        
                                         //Data for experiment 2
                                         if (i == 6) {
-                                            experiment2Independent[0] = values[0];
-                                            experiment2Independent[1] = values[1];
-                                            experiment2Independent[j] = values[j];
-                                        }
+                                           experiment2Independent[0] = values[0];
+                                           experiment2Independent[1] = values[1];
+                                           experiment2Independent[j] = values[j];
+                                       }
                                        
                                        //Data for experiment 3
-                                        if (i == 11) {
+                                       if (i == 11) {
                                            experiment3Independent[0] = values[0];
                                            experiment3Independent[1] = values[1];
                                            experiment3Independent[j] = values[j];
-                                        }
+                                       }
                                        
-                                    }else {
+                                  }else {
                                       errors.add("The number should be increase in line " + i);
-                                    }
-                                }
+                                  }
+                              }
                               
                          }else {
                              errors.add("Line " + i + " contains incorrect data in the first two items.")
