@@ -371,7 +371,7 @@ public class Main {
             }
             System.exit(1);
         } else {
-            System.out.println("No errors found in input file.");
+            System.out.println("No errors found.");
         }
     }
 
