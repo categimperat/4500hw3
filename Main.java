@@ -84,7 +84,7 @@ public class Main {
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
 
-    //Variables for experiment 1
+    // Variables for experiment 1
     private static ArrayList<String> experiment1Independent = new ArrayList<String>();
     private static ArrayList<String> experiment1Fix1 = new ArrayList<String>(3);
     private static ArrayList<String> experiment1Fix2 = new ArrayList<String>(3);
@@ -96,32 +96,30 @@ public class Main {
     private static ArrayList<Integer> experiment1R = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment1P = new ArrayList<Integer>();
 
-    //Variables for experiment 2
+    // Variables for experiment 2
     private static ArrayList<String> experiment2Independent = new ArrayList<String>();
     private static ArrayList<String> experiment2Fix1 = new ArrayList<String>(3);
     private static ArrayList<String> experiment2Fix2 = new ArrayList<String>(3);
     private static ArrayList<String> experiment2Fix3 = new ArrayList<String>(3);
     private static ArrayList<String> experiment2Dependent = new ArrayList<String>(2);
-    
+
     private static ArrayList<Integer> experiment2D = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment2M = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment2R = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment2P = new ArrayList<Integer>();
 
-    //Variables for experiment 3
+    // Variables for experiment 3
     private static ArrayList<String> experiment3Independent = new ArrayList<String>();
     private static ArrayList<String> experiment3Fix1 = new ArrayList<String>(3);
     private static ArrayList<String> experiment3Fix2 = new ArrayList<String>(3);
     private static ArrayList<String> experiment3Fix3 = new ArrayList<String>(3);
     private static ArrayList<String> experiment3Dependent = new ArrayList<String>(2);
-    
+
     private static ArrayList<Integer> experiment3D = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment3M = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment3R = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment3P = new ArrayList<Integer>();
-    
-    
-    
+
     private static List<String> errors = new ArrayList<>();
 
     private static void parseInput() throws IOException {
@@ -133,10 +131,12 @@ public class Main {
             int noOfLines = (int) fileStream.count();
             if (noOfLines > 15) {
                 errors.add("Input file contains too many lines of data.");
-            } 
-            /*else if (noOfLines < 5) {
-                errors.add("Input file contains less five lines of data.");
-            }*/
+            }
+            /*
+             * else if (noOfLines < 5) {
+             * errors.add("Input file contains less five lines of data.");
+             * }
+             */
         }
 
         // Check and parse each line of input file
@@ -169,38 +169,38 @@ public class Main {
                     if (values.length >= 4 && values.length <= 15) {
                         if (values[0].equals("independent")) {
                             if (values[1].equals("D") || values[1].equals("M")
-                                || values[1].equals("R") || values[1].equals("P")) {
-                                for (int j = 2; j < values.length; j++) {
-                                   if (Integer.parseInt(values[j]) < Integer.parseInt(values[j + 1])) {
-                                      // Add data into its relative line
-                                      // Data for experiment 1
-                                      if (i == 1) {
-                                        experiment1Independent.add(values[0]);
-                                        experiment1Independent.add(values[1]);
-                                        experiment1Independent.add(values[j]);
-                                      }
+                                    || values[1].equals("R") || values[1].equals("P")) {
+                                for (int j = 2; j < values.length - 1; j++) {
+                                    if (Integer.parseInt(values[j]) < Integer.parseInt(values[j + 1])) {
+                                        // Add data into its relative line
+                                        // Data for experiment 1
+                                        if (i == 1) {
+                                            experiment1Independent.add(values[0]);
+                                            experiment1Independent.add(values[1]);
+                                            experiment1Independent.add(values[j]);
+                                        }
 
-                                      // Data for experiment 2
-                                      if (i == 6) {
-                                        experiment2Independent.add(values[0]);
-                                        experiment2Independent.add(values[1]);
-                                        experiment2Independent.add(values[j]);
-                                      }
+                                        // Data for experiment 2
+                                        if (i == 6) {
+                                            experiment2Independent.add(values[0]);
+                                            experiment2Independent.add(values[1]);
+                                            experiment2Independent.add(values[j]);
+                                        }
 
-                                      // Data for experiment 3
-                                      if (i == 11) {
-                                        experiment3Independent.add(values[0]);
-                                        experiment3Independent.add(values[1]);
-                                        experiment3Independent.add(values[j]);
-                                      }
-                                    
-                                    }else {
-                                    errors.add("The number should be increase in line " + i);
+                                        // Data for experiment 3
+                                        if (i == 11) {
+                                            experiment3Independent.add(values[0]);
+                                            experiment3Independent.add(values[1]);
+                                            experiment3Independent.add(values[j]);
+                                        }
+
+                                    } else {
+                                        errors.add("The number should be increase in line " + i);
                                     }
-                                }    
-                            
-                            }else {
-                               errors.add("Line " + i + " contains incorrect letter in the second item.");
+                                }
+
+                            } else {
+                                errors.add("Line " + i + " contains incorrect letter in the second item.");
                             }
                         } else {
                             errors.add("Line " + i + " contains incorrect letters in the first item.");
@@ -327,6 +327,7 @@ public class Main {
             // Assign experiment 1D value
             if (experiment1Independent.get(1).equals("D")) {
                 for (int j = 0; j < (experiment1Independent.size() - 2); j++) {
+                    System.out.println(experiment1Independent.get(j + 2));
                     experiment1D.add(Integer.parseInt(experiment1Independent.get(j + 2)));
                 }
             } else if (experiment1Fix1.get(1).equals("D")) {
@@ -551,7 +552,7 @@ public class Main {
                         "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
                         +
                         " and average values of each experiment, then it will log those results in an output file.\n");
-        // parseInput();
+        parseInput();
 
         outputGenerator(xCoordinates, yCoordinates);
     }
