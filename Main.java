@@ -554,6 +554,8 @@ public class Main {
                         " and average values of each experiment, then it will log those results in an output file.\n");
         parseInput();
 
+        // the actual experiment neds to be run
+
         outputGenerator(xCoordinates, yCoordinates);
     }
 }
