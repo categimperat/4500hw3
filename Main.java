@@ -614,8 +614,6 @@ public class Main {
     // Process and store all variables
     Map<String, Object> processedData = processVariables(allVariables);
 
-    // You can now work with the processedData map as needed
-
     checkForErrors();
 }
   
@@ -628,7 +626,7 @@ public class Main {
                         "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
                         +
                         " and average values of each experiment, then it will log those results in an output file.\n");
-        // parseInput();
+        parseInput();
 
         outputGenerator(xCoordinates, yCoordinates);
     }
