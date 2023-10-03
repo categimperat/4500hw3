@@ -516,7 +516,109 @@ public class Main {
         outWriter.close();
         checkForErrors();
     }
+// process all the variable types as described above
+  private static Map<String, Object> processVariables(List<String[]> allVariables) {
+    Map<String, Object> processedData = new HashMap<>();
 
+    for (String[] variable : allVariables) {
+        if (variable.length >= 3) {
+            String variableName = variable[1];
+            String variableType = variable[2];
+            Object data = null; // Processed data
+
+            // Extract and process additional values if needed
+            if (variableType.equals("D")) {
+                // Example: Extract and store integer values
+                int[] values = new int[variable.length - 3];
+                for (int i = 3; i < variable.length; i++) {
+                    values[i - 3] = Integer.parseInt(variable[i]);
+                }
+                data = values;
+                System.out.println("Storing Variable Name: " + variableName);
+                System.out.println("Storing Extracted Values for Type D: " + Arrays.toString(values));
+            } else if (variableType.equals("M")) {
+                // Process as needed for type "M" and set the processed data
+                data = "Processed Data for Type M"; // Replace with actual processing logic
+                System.out.println("Processing Type M for Variable Name: " + variableName);
+            } else if (variableType.equals("R")) {
+                // Process as needed for type "R" and set the processed data
+                data = 0.0; // Replace with actual processing logic
+                System.out.println("Processing Type R for Variable Name: " + variableName);
+            } else if (variableType.equals("P")) {
+                // Process as needed for type "P" and set the processed data
+                data = "Processed Data for Type P"; 
+                System.out.println("Processing Type P for Variable Name: " + variableName);
+            } else {
+                // Handle unknown variable types or validation
+                System.err.println("Unknown variable type: " + variableType);
+            }
+
+            // Store 'variableName' and processed data in the map
+            processedData.put(variableName, data);
+        } else {
+            // Handle incomplete data or validation errors
+            System.err.println("Invalid data format: " + Arrays.toString(variable));
+        }
+    }
+
+    // Return the map containing all processed data
+    return processedData;
+}
+
+//parseinput
+  private static void parseInput() throws IOException {
+    BufferedReader br = new BufferedReader(new FileReader("indata.txt"));
+    String line;
+
+    // Create a list to store all variables
+    List<String[]> allVariables = new ArrayList<>();
+
+    try (Stream<String> fileStream = Files.lines(Paths.get("indata.txt"))) {
+        int noOfLines = (int) fileStream.count();
+        if (noOfLines > 15) {
+            errors.add("Input file contains too many lines of data.");
+        } else if (noOfLines < 5) {
+            errors.add("Input file contains fewer than five lines of data.");
+        }
+    }
+
+    // Loop through each line of input
+    for (int i = 1; i <= 15; i++) {
+        line = br.readLine();
+        if (line == null) {
+            break; // Exit the loop if there are no more lines
+        }
+
+        // Remove whitespace and split the line by commas
+        line = line.replaceAll(" ", "");
+        String[] values = line.split(",");
+
+        // Check the first element to determine the type of variable
+        if (values.length >= 2) {
+            String variableType = values[0];
+            String variableName = values[1];
+
+            // Determine the type of variable and store it accordingly
+            if (variableType.equals("independent") || variableType.equals("fixed") || variableType.equals("dependent")) {
+                allVariables.add(values);
+            } else {
+                errors.add("Invalid variable type in line " + i);
+            }
+        } else {
+            errors.add("Invalid input format in line " + i);
+        }
+    }
+
+    br.close();
+
+    // Process and store all variables
+    Map<String, Object> processedData = processVariables(allVariables);
+
+    // You can now work with the processedData map as needed
+
+    checkForErrors();
+}
+  
     public static void main(String[] args) throws IOException {
         System.out
                 .println("The program takes an input file which describes the parameters of 3 different experiments.\n"
