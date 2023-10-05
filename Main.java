@@ -289,45 +289,46 @@ public class Main {
         switch (fixedExperiment1_1.get(0)) {
             case "D":
                 experiment1D.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-
+                break;
             case "P":
                 experiment1P.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-
+                break;
             case "M":
                 experiment1M.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-
+                break;
             case "R":
                 experiment1R.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                break;
         }
         switch (fixedExperiment1_2.get(0)) {
             case "D":
                 experiment1D.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-
+                break;
             case "P":
                 experiment1P.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-
+                break;
             case "M":
                 experiment1M.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-
+                break;
             case "R":
                 experiment1R.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                break;
         }
         switch (fixedExperiment1_3.get(0)) {
             case "D":
                 experiment1D.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-
+                break;
             case "P":
                 experiment1P.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-
+                break;
             case "M":
                 experiment1M.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-
+                break;
             case "R":
                 experiment1R.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                break;
         }
-
         checkForErrors();
-
     }
 
     private static void checkForErrors() {
@@ -459,13 +460,9 @@ public class Main {
         // run experiment however many times as necessary
         ExperimentData[] experiment1 = new ExperimentData[indepExperiment1.size() - 1];
         if (indepExperiment1.get(0).equals("D")) {
-
             for (int i = 1; i < indepExperiment1.size(); i++) {
-                // System.out.println(Integer.parseInt(indepExperiment1.get(i)));
                 experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
-
                 xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-
                 experiment1[i - 1] = new ExperimentData(
                         currentIndepVar,
                         currentDepVar,
@@ -633,7 +630,6 @@ public class Main {
                 int x = xCoordinates.get(i);
                 double y = yCoordinates.get(i);
                 int yGraph = Math.round((100 * (float) y / (float) yMax));
-                System.out.println(yGraph);
 
                 // Print x, separator, and stars based on yGraph value
                 outWriter.printf("%d| %s%n", x, "*".repeat(yGraph));
