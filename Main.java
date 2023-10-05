@@ -52,17 +52,23 @@ class Person {
 }
 
 class ExperimentData {
-    int Dimension;
-    int maxMoves;
-    int repetitions;
-    int protocol;
+    String currentIndepVar;
+    String currentDepVar;
+    Integer Dimension;
+    Integer maxMoves;
+    Integer repetitions;
+    Integer protocol;
     double highMoves;
     double lowMoves;
     double averageMoves;
 
-    public ExperimentData(int dimension, int maxMoves, int repetitions, int protocol, double lowMoves, double highMoves,
+    public ExperimentData(String currentIndepVar, String currentDepVar, int dimension, int protocol, int maxMoves,
+            int repetitions,
+            double lowMoves, double highMoves,
             double averageMoves) {
         Dimension = dimension;
+        this.currentIndepVar = currentIndepVar;
+        this.currentDepVar = currentDepVar;
         this.maxMoves = maxMoves;
         this.repetitions = repetitions;
         this.protocol = protocol;
@@ -74,6 +80,9 @@ class ExperimentData {
 
 public class Main {
 
+    private static String currentIndepVar;
+    private static String currentDepVar;
+
     // sample xcoords/ycoords
     // these should be replaced with dynamically populated arrayLists
 
@@ -84,15 +93,17 @@ public class Main {
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
 
-    // private static int[] experiment1Dimensions = new int[5];
-    // private static int[] experiment1PMR = new int[3];
-
     // Variables for experiment 1
     private static ArrayList<String> indepExperiment1 = new ArrayList<String>();
     private static ArrayList<String> fixedExperiment1_1 = new ArrayList<String>(1);
     private static ArrayList<String> fixedExperiment1_2 = new ArrayList<String>(1);
     private static ArrayList<String> fixedExperiment1_3 = new ArrayList<String>(1);
     private static ArrayList<String> depExperiment1 = new ArrayList<String>(1);
+
+    private static ArrayList<Integer> experiment1D = new ArrayList<Integer>();
+    private static ArrayList<Integer> experiment1P = new ArrayList<Integer>();
+    private static ArrayList<Integer> experiment1M = new ArrayList<Integer>();
+    private static ArrayList<Integer> experiment1R = new ArrayList<Integer>();
 
     // Hold one letter abbreviations for experiment 1
     private static ArrayList<String> charArr = new ArrayList<String>();
@@ -138,7 +149,7 @@ public class Main {
 
             if (!matcher.find()) {
 
-                System.out.println("Not martch: " + "Line " + i + " contains incorrect data.");
+                System.out.println("Not match: " + "Line " + i + " contains incorrect data.");
                 errors.add("Line " + i + " contains incorrect data.");
             }
 
@@ -272,6 +283,49 @@ public class Main {
             errors.add("The second value-capital letters are not identical in the first four lines.");
         }
 
+        currentIndepVar = indepExperiment1.get(0);
+        currentDepVar = depExperiment1.get(0);
+
+        switch (fixedExperiment1_1.get(0)) {
+            case "D":
+                experiment1D.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+
+            case "P":
+                experiment1P.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+
+            case "M":
+                experiment1M.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+
+            case "R":
+                experiment1R.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+        }
+        switch (fixedExperiment1_2.get(0)) {
+            case "D":
+                experiment1D.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+
+            case "P":
+                experiment1P.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+
+            case "M":
+                experiment1M.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+
+            case "R":
+                experiment1R.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+        }
+        switch (fixedExperiment1_3.get(0)) {
+            case "D":
+                experiment1D.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+
+            case "P":
+                experiment1P.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+
+            case "M":
+                experiment1M.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+
+            case "R":
+                experiment1R.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+        }
+
         checkForErrors();
 
     }
@@ -392,9 +446,13 @@ public class Main {
 
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
-    private static void outputGenerator(ArrayList<Integer> xCoordinates, ArrayList<Integer> yCoordinates)
+    private static void outputGenerator(String currentIndepVar, String currentDepVar, ArrayList<Integer> xCoordinates,
+            ArrayList<Integer> yCoordinates)
             throws IOException {
-        // sample xcoords/ycoords
+
+        // for (int i = 0; i < experiment1D.size(); i++) {
+        // System.out.println(experiment1D.get(i));
+        // }
 
         // Check if the number of x and y coordinates match
         if (xCoordinates.size() != yCoordinates.size()) {
@@ -440,10 +498,71 @@ public class Main {
                         "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
                         +
                         " and average values of each experiment, then it will log those results in an output file.\n");
+
         parseInput();
 
-        // the actual experiment needs to be run
+        // packaging data into arrays of objects
+        ExperimentData[] experiment1 = new ExperimentData[indepExperiment1.size() - 1];
+        switch (currentIndepVar) {
+            case "D":
+                for (int i = 1; i < indepExperiment1.size(); i++) {
+                    experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
+                    experiment1[i - 1] = new ExperimentData(
+                            currentIndepVar,
+                            currentDepVar,
+                            experiment1D.get(i - 1),
+                            experiment1P.get(0),
+                            experiment1M.get(0),
+                            experiment1R.get(0),
+                            1.0,
+                            2.0,
+                            3.0);
+                }
+            case "P":
+                for (int i = 1; i < indepExperiment1.size(); i++) {
+                    experiment1P.add(Integer.parseInt(indepExperiment1.get(i)));
+                    experiment1[i - 1] = new ExperimentData(
+                            currentIndepVar,
+                            currentDepVar,
+                            experiment1D.get(0),
+                            experiment1P.get(i - 1),
+                            experiment1M.get(0),
+                            experiment1R.get(0),
+                            1.0,
+                            2.0,
+                            3.0);
 
-        outputGenerator(xCoordinates, yCoordinates);
+                }
+            case "M":
+                for (int i = 1; i < indepExperiment1.size(); i++) {
+                    experiment1M.add(Integer.parseInt(indepExperiment1.get(i)));
+                    experiment1[i - 1] = new ExperimentData(
+                            currentIndepVar,
+                            currentDepVar,
+                            experiment1D.get(0),
+                            experiment1P.get(0),
+                            experiment1M.get(i - 1),
+                            experiment1R.get(0),
+                            1.0,
+                            2.0,
+                            3.0);
+                }
+            case "R":
+                for (int i = 1; i < indepExperiment1.size(); i++) {
+                    experiment1R.add(Integer.parseInt(indepExperiment1.get(i)));
+                    experiment1[i - 1] = new ExperimentData(
+                            currentIndepVar,
+                            currentDepVar,
+                            experiment1D.get(0),
+                            experiment1P.get(0),
+                            experiment1M.get(0),
+                            experiment1R.get(i - 1),
+                            1.0,
+                            2.0,
+                            3.0);
+                }
+        }
+
+        outputGenerator(currentIndepVar, currentDepVar, xCoordinates, yCoordinates);
     }
 }
