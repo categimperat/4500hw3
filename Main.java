@@ -84,306 +84,194 @@ public class Main {
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
 
+    // private static int[] experiment1Dimensions = new int[5];
+    // private static int[] experiment1PMR = new int[3];
+
     // Variables for experiment 1
-    private static ArrayList<String> experiment1Independent = new ArrayList<String>();
-    private static ArrayList<String> experiment1Fix1 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment1Fix2 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment1Fix3 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment1Dependent = new ArrayList<String>(2);
+    private static ArrayList<String> indepExperiment1 = new ArrayList<String>();
+    private static ArrayList<String> fixedExperiment1_1 = new ArrayList<String>(1);
+    private static ArrayList<String> fixedExperiment1_2 = new ArrayList<String>(1);
+    private static ArrayList<String> fixedExperiment1_3 = new ArrayList<String>(1);
+    private static ArrayList<String> depExperiment1 = new ArrayList<String>(1);
 
-    private static ArrayList<Integer> experiment1D = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment1M = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment1R = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment1P = new ArrayList<Integer>();
-
-    // Variables for experiment 2
-    private static ArrayList<String> experiment2Independent = new ArrayList<String>();
-    private static ArrayList<String> experiment2Fix1 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment2Fix2 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment2Fix3 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment2Dependent = new ArrayList<String>(2);
-
-    private static ArrayList<Integer> experiment2D = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment2M = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment2R = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment2P = new ArrayList<Integer>();
-
-    // Variables for experiment 3
-    private static ArrayList<String> experiment3Independent = new ArrayList<String>();
-    private static ArrayList<String> experiment3Fix1 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment3Fix2 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment3Fix3 = new ArrayList<String>(3);
-    private static ArrayList<String> experiment3Dependent = new ArrayList<String>(2);
-
-    private static ArrayList<Integer> experiment3D = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment3M = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment3R = new ArrayList<Integer>();
-    private static ArrayList<Integer> experiment3P = new ArrayList<Integer>();
+    // Hold one letter abbreviations for experiment 1
+    private static ArrayList<String> charArr = new ArrayList<String>();
 
     private static List<String> errors = new ArrayList<>();
 
     private static void parseInput() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("indata.txt"));
 
-        String line;
+        String strLine;
 
         try (Stream<String> fileStream = Files.lines(Paths.get("indata.txt"))) {
             int noOfLines = (int) fileStream.count();
             if (noOfLines > 15) {
-                errors.add("Input file contains too many lines of data.");
+                errors.add("Input file contains too many lines.");
+            } else if (noOfLines < 5) {
+                errors.add("Input file contains too less lines.");
+            } else if (noOfLines % 5 != 0) {
+                errors.add("The number of lines should be a multiple of 5.");
             }
-            /*
-             * else if (noOfLines < 5) {
-             * errors.add("Input file contains less five lines of data.");
-             * }
-             */
         }
 
-        // Check and parse each line of input file
-        for (int i = 1; i <= 15; i++) {
-            line = br.readLine();
-            String[] values;
+        // Check if all data are correct in file
+        for (int i = 1; i <= 5; i++) {
+            strLine = br.readLine();
+            String[] lineValues;
 
-            String regex = "[0-9]+";
-            Pattern p = Pattern.compile(regex);
-            // check every line to see if it is null. if true, this indicates a file with
-            // 5<lines<15
-            // lines. if false, split line between commas.
-            if (line == null) {
+            String regex = "^[a-z]+,[A-Z],*([0-9]+,)*[0-9]*$";
+            Pattern p = Pattern.compile(regex, Pattern.MULTILINE);
+
+            if (strLine == null) {
                 errors.add("Incomplete input file.");
                 break;
             } else {
-                // if line contains whitespace, add that to errors. then, eliminate all
-                // whitespace and keep analyzing file for errors.
-                if (line.contains(" ")) {
+                if (strLine.contains(" ")) {
                     errors.add("Line " + i + " contains whitespace.");
-                    line = line.replaceAll(" ", "");
+                    strLine = strLine.replaceAll(" ", "");
                 }
-                values = line.split(",");
+                lineValues = strLine.split(",");
+            }
+
+            Matcher matcher = p.matcher(strLine);
+
+            if (!matcher.find()) {
+
+                System.out.println("Not martch: " + "Line " + i + " contains incorrect data.");
+                errors.add("Line " + i + " contains incorrect data.");
             }
 
             switch (i) {
                 case 1:
-                case 6:
-                case 11:
-                    if (values.length >= 4 && values.length <= 15) {
-                        if (values[0].equals("independent")) {
-                            if (values[1].equals("D") || values[1].equals("M")
-                                    || values[1].equals("R") || values[1].equals("P")) {
-                                for (int j = 2; j < values.length - 1; j++) {
-                                    if (Integer.parseInt(values[j]) < Integer.parseInt(values[j + 1])) {
-                                        // Add data into its relative line
-                                        // Data for experiment 1
-                                        if (i == 1) {
-                                            experiment1Independent.add(values[0]);
-                                            experiment1Independent.add(values[1]);
-                                            experiment1Independent.add(values[j]);
-                                        }
+                    if (lineValues.length >= 4 && lineValues.length <= 14) {
+                        if (lineValues[0].equals("independent")) {
+                            if (lineValues[1].equals("D") || lineValues[1].equals("M")
+                                    || lineValues[1].equals("R") || lineValues[1].equals("P")) {
 
-                                        // Data for experiment 2
-                                        if (i == 6) {
-                                            experiment2Independent.add(values[0]);
-                                            experiment2Independent.add(values[1]);
-                                            experiment2Independent.add(values[j]);
-                                        }
+                                charArr.add(lineValues[1]);
+                                indepExperiment1.add(lineValues[1]);
+                                System.out.println("lineValues.length = " + lineValues.length);
+                                // Now compare if the values are increasing from left to right
+                                for (int j = 2; j < lineValues.length; j++) {
 
-                                        // Data for experiment 3
-                                        if (i == 11) {
-                                            experiment3Independent.add(values[0]);
-                                            experiment3Independent.add(values[1]);
-                                            experiment3Independent.add(values[j]);
-                                        }
+                                    if (j == (lineValues.length - 1)) {
+                                        indepExperiment1.add(lineValues[lineValues.length - 1]);
+
+                                    } else if (Integer.parseInt(lineValues[j]) < Integer.parseInt(lineValues[j + 1])) {
+
+                                        indepExperiment1.add(lineValues[j]);
 
                                     } else {
-                                        errors.add("The number should be increase in line " + i);
+                                        errors.add("The data should be increasing on line " + i);
                                     }
+
+                                    System.out.println("indepExperiment1: " + indepExperiment1);
                                 }
 
                             } else {
-                                errors.add("Line " + i + " contains incorrect letter in the second item.");
+                                errors.add("The second value/capital is incorrect on line " + i);
                             }
                         } else {
-                            errors.add("Line " + i + " contains incorrect letters in the first item.");
+                            errors.add("The first word is not independent on line " + i);
                         }
                     } else {
-                        errors.add("Length is incorrect in line " + i);
+                        System.out.println("lineValues.length = " + lineValues.length);
+                        errors.add("Length is incorrect on line " + i);
                     }
-
+                    break;
                 case 2:
                 case 3:
                 case 4:
-                case 7:
-                case 8:
-                case 9:
-                case 12:
-                case 13:
-                case 14:
-                    if (values.length == 3) {
-                        if (values[0].equals("fixed") && (values[1].equals("D") || values[1].equals("M")
-                                || values[1].equals("R") || values[1].equals("P"))) {
-                            // Add data into its relative line
-                            // Data for experiment 1
-                            if (i == 2) {
-                                experiment1Fix1.add(values[0]);
-                                experiment1Fix1.add(values[1]);
-                                experiment1Fix1.add(values[2]);
-                            }
-                            if (i == 3) {
-                                experiment1Fix2.add(values[0]);
-                                experiment1Fix2.add(values[1]);
-                                experiment1Fix2.add(values[2]);
-                            }
-                            if (i == 4) {
-                                experiment1Fix3.add(values[0]);
-                                experiment1Fix3.add(values[1]);
-                                experiment1Fix3.add(values[2]);
+                    if (lineValues.length == 3) {
+                        if (lineValues[0].equals("fixed")) {
+                            if (lineValues[1].equals("D") || lineValues[1].equals("M")
+                                    || lineValues[1].equals("R") || lineValues[1].equals("P")) {
+
+                                if (i == 2) {
+                                    charArr.add(lineValues[1]);
+                                    fixedExperiment1_1.add(lineValues[1]);
+
+                                    // Should check if it is a digit...
+                                    fixedExperiment1_1.add(lineValues[2]);
+                                    System.out.println("fixedExperiment1_1: " + fixedExperiment1_1);
+                                }
+
+                                if (i == 3) {
+                                    charArr.add(lineValues[1]);
+                                    fixedExperiment1_2.add(lineValues[1]);
+
+                                    // Should check if it is a digit...
+                                    fixedExperiment1_2.add(lineValues[2]);
+                                    System.out.println("fixedExperiment1_2: " + fixedExperiment1_2);
+
+                                }
+
+                                if (i == 4) {
+                                    charArr.add(lineValues[1]);
+                                    fixedExperiment1_3.add(lineValues[1]);
+
+                                    // Should check if it is a digit...
+                                    fixedExperiment1_3.add(lineValues[2]);
+                                    System.out.println("fixedExperiment1_3: " + fixedExperiment1_3);
+
+                                }
+
+                            } else {
+                                errors.add("The second value/capital is incorrect on line " + i);
                             }
 
-                            // Data for experiment 2
-                            if (i == 7) {
-                                experiment2Fix1.add(values[0]);
-                                experiment2Fix1.add(values[1]);
-                                experiment2Fix1.add(values[2]);
-                            }
-                            if (i == 8) {
-                                experiment2Fix2.add(values[0]);
-                                experiment2Fix2.add(values[1]);
-                                experiment2Fix2.add(values[2]);
-                            }
-                            if (i == 9) {
-                                experiment2Fix3.add(values[0]);
-                                experiment2Fix3.add(values[1]);
-                                experiment2Fix3.add(values[2]);
-                            }
-
-                            // Data for experiment 3
-                            if (i == 12) {
-                                experiment3Fix1.add(values[0]);
-                                experiment3Fix1.add(values[1]);
-                                experiment3Fix1.add(values[2]);
-                            }
-                            if (i == 13) {
-                                experiment3Fix2.add(values[0]);
-                                experiment3Fix2.add(values[1]);
-                                experiment3Fix2.add(values[2]);
-                            }
-                            if (i == 14) {
-                                experiment3Fix3.add(values[0]);
-                                experiment3Fix3.add(values[1]);
-                                experiment3Fix3.add(values[2]);
-                            }
                         } else {
-                            errors.add("Line " + i + " contains incorrect data in the first two items.");
+                            errors.add("The first word is not fixed on line " + i);
                         }
-
                     } else {
-                        errors.add("Length is incorrect in line " + i);
+                        errors.add("Length is incorrect on line " + i);
                     }
+                    break;
 
                 case 5:
-                case 10:
-                case 15:
-                    if (values.length == 2) {
-                        if (values[0].equals("dependent")
-                                && (values[1].equals("L") || values[1].equals("H") || values[1].equals("A"))) {
-                            // Add data into its relative line
-                            // Data for experiment 1
-                            if (i == 5) {
-                                experiment1Dependent.add(values[0]);
-                                experiment1Dependent.add(values[1]);
-                            }
+                    if (lineValues.length == 2) {
+                        if (lineValues[0].equals("dependent")) {
+                            if (lineValues[1].equals("L") || lineValues[1].equals("H")
+                                    || lineValues[1].equals("A")) {
 
-                            // Data for experiment 2
-                            if (i == 10) {
-                                experiment2Dependent.add(values[0]);
-                                experiment2Dependent.add(values[1]);
-                            }
+                                depExperiment1.add(lineValues[1]);
+                                System.out.println("depExperiment1 = " + depExperiment1);
 
-                            // Data for experiment 3
-                            if (i == 15) {
-                                experiment3Dependent.add(values[0]);
-                                experiment3Dependent.add(values[1]);
+                            } else {
+                                errors.add("The second value/capital is incorrect on line " + i);
                             }
                         } else {
-                            errors.add("Line " + i + " contains incorrect data in the first item.");
+                            errors.add("The first word is not dependent on line " + i);
                         }
                     } else {
-                        errors.add("Length is incorrect in line " + i);
+                        errors.add("Length is incorrect on line " + i);
                     }
-            }
-        }
+
+                    break;
+
+            }// end of switch
+
+        } // end of for
 
         br.close();
 
-        // Find which line is the exact D, P, M, R
-        // First, check if the second element of the first four lines each experiment is
-        // not the same.
-        if (!experiment1Independent.get(1).equals(experiment1Fix1.get(1))
-                && !experiment1Independent.get(1).equals(experiment1Fix2.get(1))
-                && !experiment1Independent.get(1).equals(experiment1Fix3.get(1))
-                && !experiment1Fix1.get(1).equals(experiment1Fix2.get(1))
-                && !experiment1Fix1.get(1).equals(experiment1Fix3.get(1))
-                && !experiment1Fix2.get(1).equals(experiment1Fix3.get(1))) {
-            // Assign experiment 1D value
-            if (experiment1Independent.get(1).equals("D")) {
-                for (int j = 0; j < (experiment1Independent.size() - 2); j++) {
-                    System.out.println(experiment1Independent.get(j + 2));
-                    experiment1D.add(Integer.parseInt(experiment1Independent.get(j + 2)));
-                }
-            } else if (experiment1Fix1.get(1).equals("D")) {
-                experiment1D.add(Integer.parseInt(experiment1Fix1.get(2)));
-            } else if (experiment1Fix2.get(1).equals("D")) {
-                experiment1D.add(Integer.parseInt(experiment1Fix2.get(2)));
-            } else if (experiment1Fix3.get(1).equals("D")) {
-                experiment1D.add(Integer.parseInt(experiment1Fix3.get(2)));
+        // Check if the second value capital letter is not identical in the first four
+        // lines
+        if ((charArr.get(0) != charArr.get(1)) && (charArr.get(0) != charArr.get(2))
+                && (charArr.get(0) != charArr.get(3)) && (charArr.get(1) != charArr.get(2))
+                && (charArr.get(1) != charArr.get(3)) && (charArr.get(2) != charArr.get(3))) {
+
+            if (charArr.indexOf("D") == -1 || charArr.indexOf("M") == -1
+                    || charArr.indexOf("P") == -1 || charArr.indexOf("R") == -1) {
+
+                errors.add("One of variables(D/M/P/R) is missing.");
             }
-
-            // Assign experiment 1M value
-            if (experiment1Independent.get(1).equals("M")) {
-                for (int j = 0; j < (experiment1Independent.size() - 2); j++) {
-                    experiment1M.add(Integer.parseInt(experiment1Independent.get(j + 2)));
-                }
-            } else if (experiment1Fix1.get(1).equals("M")) {
-                experiment1M.add(Integer.parseInt(experiment1Fix1.get(2)));
-            } else if (experiment1Fix2.get(1).equals("M")) {
-                experiment1M.add(Integer.parseInt(experiment1Fix2.get(2)));
-            } else if (experiment1Fix3.get(1).equals("M")) {
-                experiment1M.add(Integer.parseInt(experiment1Fix3.get(2)));
-            }
-
-            // Assign experiment 1R value
-            if (experiment1Independent.get(1).equals("R")) {
-                for (int j = 0; j < (experiment1Independent.size() - 2); j++) {
-                    experiment1R.add(Integer.parseInt(experiment1Independent.get(j + 2)));
-                }
-            } else if (experiment1Fix1.get(1).equals("R")) {
-                experiment1R.add(Integer.parseInt(experiment1Fix1.get(2)));
-            } else if (experiment1Fix2.get(1).equals("R")) {
-                experiment1R.add(Integer.parseInt(experiment1Fix2.get(2)));
-            } else if (experiment1Fix3.get(1).equals("R")) {
-                experiment1R.add(Integer.parseInt(experiment1Fix3.get(2)));
-            }
-
-            // Assign experiment 1P value
-            if (experiment1Independent.get(1).equals("P")) {
-                for (int j = 0; j < (experiment1Independent.size() - 2); j++) {
-                    experiment1P.add(Integer.parseInt(experiment1Independent.get(j + 2)));
-                }
-            } else if (experiment1Fix1.get(1).equals("P")) {
-                experiment1P.add(Integer.parseInt(experiment1Fix1.get(2)));
-            } else if (experiment1Fix2.get(1).equals("P")) {
-                experiment1P.add(Integer.parseInt(experiment1Fix2.get(2)));
-            } else if (experiment1Fix3.get(1).equals("P")) {
-                experiment1P.add(Integer.parseInt(experiment1Fix3.get(2)));
-            }
-
-            // Check the range for D, M, R, or P??? Not sure if it is required
-
-            // continue........
 
         } else {
-            errors.add("The first four lines for each experiment should include all four of different variables.");
+            errors.add("The second value-capital letters are not identical in the first four lines.");
         }
+
         checkForErrors();
 
     }
@@ -554,7 +442,7 @@ public class Main {
                         " and average values of each experiment, then it will log those results in an output file.\n");
         parseInput();
 
-        // the actual experiment neds to be run
+        // the actual experiment needs to be run
 
         outputGenerator(xCoordinates, yCoordinates);
     }
