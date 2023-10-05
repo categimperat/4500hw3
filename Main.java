@@ -432,7 +432,7 @@ public class Main {
     }
 
     // This function runs the experiment and logs the outcome into a dad list.
-    private static List<Integer> experiment(int repetitions, int Dimension, int maxMoves, int protocol) {
+    private static List<Integer> experiment(int Dimension, int protocol, int maxMoves, int repetitions) {
         List<Integer> data = new ArrayList<>();
         for (int i = 0; i < repetitions; i++) {
             Person person1 = new Person(0, 0);
@@ -501,6 +501,11 @@ public class Main {
 
         parseInput();
 
+        double low;
+        double high;
+        double average;
+        List<Integer> data = new ArrayList<>();
+
         // packaging data into arrays of objects
         ExperimentData[] experiment1 = new ExperimentData[indepExperiment1.size() - 1];
         switch (currentIndepVar) {
@@ -517,6 +522,15 @@ public class Main {
                             1.0,
                             2.0,
                             3.0);
+                    data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                            experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                    low = Collections.min(data);
+                    high = Collections.max(data);
+                    average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                    resultsExp1.add(low);
+                    resultsExp1.add(high);
+                    resultsExp1.add(average);
+                    System.out.println(resultsExp1.get(2));
                 }
             case "P":
                 for (int i = 1; i < indepExperiment1.size(); i++) {
