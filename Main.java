@@ -450,64 +450,6 @@ public class Main {
             ArrayList<Double> yCoordinates)
             throws IOException {
 
-        for (int i = 0; i < resultsExp1.size() / 3; i++) {
-            yCoordinates.add(resultsExp1.get((3 * i) + 2));
-        }
-
-        // Check if the number of x and y coordinates match
-        if (xCoordinates.size() != yCoordinates.size()) {
-            errors.add("Error: xCoordinates and yCoordinates must have the same number of items.");
-        }
-
-        // Check if xCoordinates are in ascending order
-        for (int i = 0; i < xCoordinates.size() - 1; i++) {
-            if (xCoordinates.get(i) > xCoordinates.get(i + 1)) {
-                errors.add("Error: xCoordinates must be in ascending order.");
-            }
-        }
-
-        // Determine the maximum value in yCoordinates
-        double yMax = yCoordinates.get(0);
-        for (int i = 0; i < yCoordinates.size(); i++) {
-            if (yCoordinates.get(i) > yMax)
-                yMax = yCoordinates.get(i);
-        }
-
-        // Open the output file
-        PrintWriter outWriter = new PrintWriter(new FileWriter("outdata.txt"));
-
-        // generate the table
-
-        // Generate the bar graph
-        if (xCoordinates.size() == yCoordinates.size()) {
-            for (int i = 0; i < xCoordinates.size(); i++) {
-                int x = xCoordinates.get(i);
-                double y = yCoordinates.get(i);
-                int yGraph = Math.round((100 * (float) y / (float) yMax));
-                System.out.println(yGraph);
-
-                // Print x, separator, and stars based on yGraph value
-                outWriter.printf("%d| %s%n", x, "*".repeat(yGraph));
-            }
-        }
-
-        // Close the output file
-        outWriter.close();
-        checkForErrors();
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.out
-                .println("The program takes an input file which describes the parameters of 3 different experiments.\n"
-                        +
-                        "The program takes the input file and parses each of the parameters for the experiments, then it runs\n"
-                        +
-                        "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
-                        +
-                        " and average values of each experiment, then it will log those results in an output file.\n");
-
-        parseInput();
-
         double low;
         double high;
         double average;
@@ -617,6 +559,109 @@ public class Main {
                 resultsExp1.add(average);
             }
         }
+
+        // populate ycoords
+        for (int i = 0; i < resultsExp1.size() / 3; i++) {
+            if (currentDepVar.equals("L")) {
+                yCoordinates.add(resultsExp1.get((3 * i)));
+            }
+            if (currentDepVar.equals("H")) {
+                yCoordinates.add(resultsExp1.get((3 * i) + 1));
+            }
+            if (currentDepVar.equals("A")) {
+                yCoordinates.add(resultsExp1.get((3 * i) + 2));
+            }
+        }
+
+        // Check if the number of x and y coordinates match
+        if (xCoordinates.size() != yCoordinates.size()) {
+            errors.add("Error: xCoordinates and yCoordinates must have the same number of items.");
+        }
+
+        // Check if xCoordinates are in ascending order
+        for (int i = 0; i < xCoordinates.size() - 1; i++) {
+            if (xCoordinates.get(i) > xCoordinates.get(i + 1)) {
+                errors.add("Error: xCoordinates must be in ascending order.");
+            }
+        }
+
+        // Determine the maximum value in yCoordinates
+        double yMax = yCoordinates.get(0);
+        for (int i = 0; i < yCoordinates.size(); i++) {
+            if (yCoordinates.get(i) > yMax)
+                yMax = yCoordinates.get(i);
+        }
+
+        // Open the output file
+
+        PrintWriter outWriter = new PrintWriter(new FileWriter("outdata.txt"));
+
+        // generate the table
+        outWriter.println(
+                "*--------------*--------------*--------------*------------*--------------*");
+        outWriter.printf(
+                "|  Dimensions  |  Max Moves   |  Repetitions |  Protocol  | %-12s |\n", currentDepVar);
+        outWriter.println(
+                "*--------------*--------------*--------------*------------*--------------*");
+        for (int i = 0; i < xCoordinates.size(); i++) {
+            if (currentDepVar.equals("L")) {
+                outWriter.printf("| %-12d | %-12d | %-12d | %-10d | %-12.0f |\n",
+                        experiment1[i].Dimension,
+                        experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
+                        resultsExp1.get((3 * i)));
+            }
+            if (currentDepVar.equals("H")) {
+                outWriter.printf("| %-12d | %-12d | %-12d | %-10d | %-12.0f |\n",
+                        experiment1[i].Dimension,
+                        experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
+                        resultsExp1.get((3 * i + 1)));
+            }
+            if (currentDepVar.equals("A")) {
+                outWriter.printf("| %-12d | %-12d | %-12d | %-10d | %-12.0f |\n",
+                        experiment1[i].Dimension,
+                        experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
+                        resultsExp1.get((3 * i + 2)));
+            }
+            // outWriter.printf("| %-12d | %-12d | %-12d | %-10d | %-12.0f | %-12.0f |
+            // %-12.0f |\n",
+            // experiment1[i].Dimension,
+            // experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
+            // resultsExp1.get((3 * i)), resultsExp1.get((3 * i) + 1), resultsExp1.get((3 *
+            // i) + 2));
+            outWriter.println(
+                    "*--------------*--------------*--------------*-------------*-------------*");
+        }
+        outWriter.println();
+
+        // Generate the bar graph
+        if (xCoordinates.size() == yCoordinates.size()) {
+            for (int i = 0; i < xCoordinates.size(); i++) {
+                int x = xCoordinates.get(i);
+                double y = yCoordinates.get(i);
+                int yGraph = Math.round((100 * (float) y / (float) yMax));
+                System.out.println(yGraph);
+
+                // Print x, separator, and stars based on yGraph value
+                outWriter.printf("%d| %s%n", x, "*".repeat(yGraph));
+            }
+        }
+
+        // Close the output file
+        outWriter.close();
+        checkForErrors();
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.out
+                .println("The program takes an input file which describes the parameters of 3 different experiments.\n"
+                        +
+                        "The program takes the input file and parses each of the parameters for the experiments, then it runs\n"
+                        +
+                        "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
+                        +
+                        " and average values of each experiment, then it will log those results in an output file.\n");
+
+        parseInput();
 
         outputGenerator(currentIndepVar, currentDepVar, xCoordinates, yCoordinates);
     }
