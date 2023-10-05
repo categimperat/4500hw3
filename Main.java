@@ -447,24 +447,27 @@ public class Main {
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
     private static void outputGenerator(String currentIndepVar, String currentDepVar, ArrayList<Integer> xCoordinates,
-            ArrayList<Integer> yCoordinates)
+            ArrayList<Double> yCoordinates)
             throws IOException {
+
         for (int i = 0; i < resultsExp1.size() / 3; i++) {
-            yCoordinates.add(3.0);
+            yCoordinates.add(resultsExp1.get((3 * i) + 2));
         }
 
         // Check if the number of x and y coordinates match
         if (xCoordinates.size() != yCoordinates.size()) {
             errors.add("Error: xCoordinates and yCoordinates must have the same number of items.");
         }
+
         // Check if xCoordinates are in ascending order
-        for (int i = 1; i < xCoordinates.size(); i++) {
-            if (xCoordinates.get(i) <= xCoordinates.get(i - 1)) {
+        for (int i = 0; i < xCoordinates.size() - 1; i++) {
+            if (xCoordinates.get(i) > xCoordinates.get(i + 1)) {
                 errors.add("Error: xCoordinates must be in ascending order.");
             }
         }
+
         // Determine the maximum value in yCoordinates
-        int yMax = yCoordinates.get(0);
+        double yMax = yCoordinates.get(0);
         for (int i = 0; i < yCoordinates.size(); i++) {
             if (yCoordinates.get(i) > yMax)
                 yMax = yCoordinates.get(i);
@@ -473,12 +476,15 @@ public class Main {
         // Open the output file
         PrintWriter outWriter = new PrintWriter(new FileWriter("outdata.txt"));
 
+        // generate the table
+
         // Generate the bar graph
         if (xCoordinates.size() == yCoordinates.size()) {
             for (int i = 0; i < xCoordinates.size(); i++) {
                 int x = xCoordinates.get(i);
-                int y = yCoordinates.get(i);
-                int yGraph = Math.round((100 * (float) y / yMax));
+                double y = yCoordinates.get(i);
+                int yGraph = Math.round((100 * (float) y / (float) yMax));
+                System.out.println(yGraph);
 
                 // Print x, separator, and stars based on yGraph value
                 outWriter.printf("%d| %s%n", x, "*".repeat(yGraph));
@@ -510,107 +516,107 @@ public class Main {
         // packaging data into arrays of objects
         // run experiment however many times as necessary
         ExperimentData[] experiment1 = new ExperimentData[indepExperiment1.size() - 1];
-        switch (currentIndepVar) {
-            case "D":
+        if (indepExperiment1.get(0).equals("D")) {
 
-                for (int i = 1; i < indepExperiment1.size(); i++) {
-                    experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
-                    xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                    experiment1[i - 1] = new ExperimentData(
-                            currentIndepVar,
-                            currentDepVar,
-                            experiment1D.get(i - 1),
-                            experiment1P.get(0),
-                            experiment1M.get(0),
-                            experiment1R.get(0),
-                            1.0,
-                            2.0,
-                            3.0);
-                    data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                            experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                    low = Collections.min(data);
-                    high = Collections.max(data);
-                    average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                    resultsExp1.add(low);
-                    resultsExp1.add(high);
-                    resultsExp1.add(average);
+            for (int i = 1; i < indepExperiment1.size(); i++) {
+                // System.out.println(Integer.parseInt(indepExperiment1.get(i)));
+                experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
 
-                }
-                // for (int j = 1; j < resultsExp1.size(); j++) {
-                // System.out.println(resultsExp1.get(j));
-                // }
-            case "P":
-                for (int i = 1; i < indepExperiment1.size(); i++) {
-                    experiment1P.add(Integer.parseInt(indepExperiment1.get(i)));
-                    xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                    experiment1[i - 1] = new ExperimentData(
-                            currentIndepVar,
-                            currentDepVar,
-                            experiment1D.get(0),
-                            experiment1P.get(i - 1),
-                            experiment1M.get(0),
-                            experiment1R.get(0),
-                            1.0,
-                            2.0,
-                            3.0);
-                    data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                            experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                    low = Collections.min(data);
-                    high = Collections.max(data);
-                    average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                    resultsExp1.add(low);
-                    resultsExp1.add(high);
-                    resultsExp1.add(average);
-                }
-            case "M":
-                for (int i = 1; i < indepExperiment1.size(); i++) {
-                    experiment1M.add(Integer.parseInt(indepExperiment1.get(i)));
-                    xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                    experiment1[i - 1] = new ExperimentData(
-                            currentIndepVar,
-                            currentDepVar,
-                            experiment1D.get(0),
-                            experiment1P.get(0),
-                            experiment1M.get(i - 1),
-                            experiment1R.get(0),
-                            1.0,
-                            2.0,
-                            3.0);
-                    data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                            experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                    low = Collections.min(data);
-                    high = Collections.max(data);
-                    average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                    resultsExp1.add(low);
-                    resultsExp1.add(high);
-                    resultsExp1.add(average);
-                }
-            case "R":
-                for (int i = 1; i < indepExperiment1.size(); i++) {
-                    experiment1R.add(Integer.parseInt(indepExperiment1.get(i)));
-                    xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                    experiment1[i - 1] = new ExperimentData(
-                            currentIndepVar,
-                            currentDepVar,
-                            experiment1D.get(0),
-                            experiment1P.get(0),
-                            experiment1M.get(0),
-                            experiment1R.get(i - 1),
-                            1.0,
-                            2.0,
-                            3.0);
-                    data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                            experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                    low = Collections.min(data);
-                    high = Collections.max(data);
-                    average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                    resultsExp1.add(low);
-                    resultsExp1.add(high);
-                    resultsExp1.add(average);
-                }
+                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+
+                experiment1[i - 1] = new ExperimentData(
+                        currentIndepVar,
+                        currentDepVar,
+                        experiment1D.get(i - 1),
+                        experiment1P.get(0),
+                        experiment1M.get(0),
+                        experiment1R.get(0),
+                        1.0,
+                        2.0,
+                        3.0);
+                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                low = Collections.min(data);
+                high = Collections.max(data);
+                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                resultsExp1.add(low);
+                resultsExp1.add(high);
+                resultsExp1.add(average);
+
+            }
         }
-
-        //
+        if (indepExperiment1.get(0).equals("P")) {
+            for (int i = 1; i < indepExperiment1.size(); i++) {
+                experiment1P.add(Integer.parseInt(indepExperiment1.get(i)));
+                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                experiment1[i - 1] = new ExperimentData(
+                        currentIndepVar,
+                        currentDepVar,
+                        experiment1D.get(0),
+                        experiment1P.get(i - 1),
+                        experiment1M.get(0),
+                        experiment1R.get(0),
+                        1.0,
+                        2.0,
+                        3.0);
+                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                low = Collections.min(data);
+                high = Collections.max(data);
+                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                resultsExp1.add(low);
+                resultsExp1.add(high);
+                resultsExp1.add(average);
+            }
+        }
+        if (indepExperiment1.get(0).equals("M")) {
+            for (int i = 1; i < indepExperiment1.size(); i++) {
+                experiment1M.add(Integer.parseInt(indepExperiment1.get(i)));
+                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                experiment1[i - 1] = new ExperimentData(
+                        currentIndepVar,
+                        currentDepVar,
+                        experiment1D.get(0),
+                        experiment1P.get(0),
+                        experiment1M.get(i - 1),
+                        experiment1R.get(0),
+                        1.0,
+                        2.0,
+                        3.0);
+                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                low = Collections.min(data);
+                high = Collections.max(data);
+                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                resultsExp1.add(low);
+                resultsExp1.add(high);
+                resultsExp1.add(average);
+            }
+        }
+        if (indepExperiment1.get(0).equals("R")) {
+            for (int i = 1; i < indepExperiment1.size(); i++) {
+                experiment1R.add(Integer.parseInt(indepExperiment1.get(i)));
+                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                experiment1[i - 1] = new ExperimentData(
+                        currentIndepVar,
+                        currentDepVar,
+                        experiment1D.get(0),
+                        experiment1P.get(0),
+                        experiment1M.get(0),
+                        experiment1R.get(i - 1),
+                        1.0,
+                        2.0,
+                        3.0);
+                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                low = Collections.min(data);
+                high = Collections.max(data);
+                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                resultsExp1.add(low);
+                resultsExp1.add(high);
+                resultsExp1.add(average);
+            }
+        }
 
         outputGenerator(currentIndepVar, currentDepVar, xCoordinates, yCoordinates);
     }
