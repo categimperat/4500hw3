@@ -622,12 +622,6 @@ public class Main {
                         experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
                         resultsExp1.get((3 * i + 2)));
             }
-            // outWriter.printf("| %-12d | %-12d | %-12d | %-10d | %-12.0f | %-12.0f |
-            // %-12.0f |\n",
-            // experiment1[i].Dimension,
-            // experiment1[i].maxMoves, experiment1[i].repetitions, experiment1[i].protocol,
-            // resultsExp1.get((3 * i)), resultsExp1.get((3 * i) + 1), resultsExp1.get((3 *
-            // i) + 2));
             outWriter.println(
                     "*--------------*--------------*--------------*-------------*-------------*");
         }
