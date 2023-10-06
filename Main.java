@@ -34,11 +34,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.*;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 import java.util.stream.Stream;
 
 class Person {
@@ -78,66 +77,66 @@ class ExperimentData {
     }
 }
 
-public class Main {
 
+public class Main {
+    
     private static String currentIndepVar;
     private static String currentDepVar;
-
-    // sample xcoords/ycoords
-    // these should be replaced with dynamically populated arrayLists
-
+    
     private static ArrayList<Integer> xCoordinates = new ArrayList<>();
     private static ArrayList<Double> yCoordinates = new ArrayList<>();
 
     private static List<Double> resultsExp1 = new ArrayList<>();
     private static List<Double> resultsExp2 = new ArrayList<>();
     private static List<Double> resultsExp3 = new ArrayList<>();
-
-    // Variables for experiment 1
+    
+    //Variables for experiment 1
     private static ArrayList<String> indepExperiment1 = new ArrayList<String>();
     private static ArrayList<String> fixedExperiment1_1 = new ArrayList<String>(1);
     private static ArrayList<String> fixedExperiment1_2 = new ArrayList<String>(1);
     private static ArrayList<String> fixedExperiment1_3 = new ArrayList<String>(1);
     private static ArrayList<String> depExperiment1 = new ArrayList<String>(1);
-
+    
     private static ArrayList<Integer> experiment1D = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment1P = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment1M = new ArrayList<Integer>();
     private static ArrayList<Integer> experiment1R = new ArrayList<Integer>();
-
-    // Hold one letter abbreviations for experiment 1
+    
+    //Hold one letter abbreviations for experiment 1
     private static ArrayList<String> charArr = new ArrayList<String>();
-
+    
     private static List<String> errors = new ArrayList<>();
-
+    
+    //Check if data in file are correct
     private static void parseInput() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader("indata.txt"));
 
         String strLine;
-
+        
         try (Stream<String> fileStream = Files.lines(Paths.get("indata.txt"))) {
             int noOfLines = (int) fileStream.count();
             if (noOfLines > 15) {
                 errors.add("Input file contains too many lines.");
-            } else if (noOfLines < 5) {
+            }else if (noOfLines < 5) {
                 errors.add("Input file contains too less lines.");
-            } else if (noOfLines % 5 != 0) {
+            }else if (noOfLines % 5 != 0) {
                 errors.add("The number of lines should be a multiple of 5.");
             }
         }
-
-        // Check if all data are correct in file
+        
+        
+        //Check if all data are correct in file
         for (int i = 1; i <= 5; i++) {
             strLine = br.readLine();
             String[] lineValues;
-
+            
             String regex = "^[a-z]+,[A-Z],*([0-9]+,)*[0-9]*$";
             Pattern p = Pattern.compile(regex, Pattern.MULTILINE);
-
+            
             if (strLine == null) {
                 errors.add("Incomplete input file.");
                 break;
-            } else {
+            }else {
                 if (strLine.contains(" ")) {
                     errors.add("Line " + i + " contains whitespace.");
                     strLine = strLine.replaceAll(" ", "");
@@ -148,189 +147,110 @@ public class Main {
             Matcher matcher = p.matcher(strLine);
 
             if (!matcher.find()) {
-
-                System.out.println("Not match: " + "Line " + i + " contains incorrect data.");
+                
+                //System.out.println("Not martch: " + "Line " + i + " contains incorrect data.");
                 errors.add("Line " + i + " contains incorrect data.");
             }
-
+            
             switch (i) {
                 case 1:
                     if (lineValues.length >= 4 && lineValues.length <= 14) {
                         if (lineValues[0].equals("independent")) {
-                            if (lineValues[1].equals("D") || lineValues[1].equals("M")
-                                    || lineValues[1].equals("R") || lineValues[1].equals("P")) {
-
-                                charArr.add(lineValues[1]);
-                                indepExperiment1.add(lineValues[1]);
-                                System.out.println("lineValues.length = " + lineValues.length);
-                                // Now compare if the values are increasing from left to right
-                                for (int j = 2; j < lineValues.length; j++) {
-
-                                    if (j == (lineValues.length - 1)) {
-                                        indepExperiment1.add(lineValues[lineValues.length - 1]);
-
-                                    } else if (Integer.parseInt(lineValues[j]) < Integer.parseInt(lineValues[j + 1])) {
-
-                                        indepExperiment1.add(lineValues[j]);
-
-                                    } else {
-                                        errors.add("The data should be increasing on line " + i);
+                            if (lineValues[1].equals("D")  || lineValues[1].equals("M")
+                                || lineValues[1].equals("R") || lineValues[1].equals("P")) {
+                                    
+                                    charArr.add(lineValues[1]);
+                                    indepExperiment1.add(lineValues[1]);
+                                    //Now compare if the values are increasing from left to right
+                                    for (int j = 2; j < lineValues.length; j++) {
+                                        
+                                        if (j == (lineValues.length - 1) ) {
+                                            indepExperiment1.add(lineValues[lineValues.length-1]);
+                                        }else if (Integer.parseInt(lineValues[j]) < Integer.parseInt(lineValues[j+1])) {
+                                            indepExperiment1.add(lineValues[j]);
+                                        }else {
+                                            errors.add("The data should be increasing in line " + i);
+                                        }
                                     }
-
-                                    System.out.println("indepExperiment1: " + indepExperiment1);
-                                }
-
-                            } else {
-                                errors.add("The second value/capital is incorrect on line " + i);
+                            }else {
+                                errors.add("The second value/capital is incorrect in line " + i);    
                             }
-                        } else {
-                            errors.add("The first word is not independent on line " + i);
+                        }else {
+                            errors.add("The first word is not independent in line " + i);
                         }
                     } else {
-                        System.out.println("lineValues.length = " + lineValues.length);
-                        errors.add("Length is incorrect on line " + i);
-                    }
-                    break;
+                        errors.add("Length is incorrect in line " + i);
+                    } 
+                    break;    
                 case 2:
                 case 3:
                 case 4:
                     if (lineValues.length == 3) {
                         if (lineValues[0].equals("fixed")) {
-                            if (lineValues[1].equals("D") || lineValues[1].equals("M")
-                                    || lineValues[1].equals("R") || lineValues[1].equals("P")) {
-
+                            if (lineValues[1].equals("D")  || lineValues[1].equals("M")
+                                || lineValues[1].equals("R") || lineValues[1].equals("P")) {
+                                    
                                 if (i == 2) {
                                     charArr.add(lineValues[1]);
                                     fixedExperiment1_1.add(lineValues[1]);
-
-                                    // Should check if it is a digit...
                                     fixedExperiment1_1.add(lineValues[2]);
-                                    System.out.println("fixedExperiment1_1: " + fixedExperiment1_1);
                                 }
-
+                                    
                                 if (i == 3) {
                                     charArr.add(lineValues[1]);
                                     fixedExperiment1_2.add(lineValues[1]);
-
-                                    // Should check if it is a digit...
                                     fixedExperiment1_2.add(lineValues[2]);
-                                    System.out.println("fixedExperiment1_2: " + fixedExperiment1_2);
-
                                 }
-
+                                
                                 if (i == 4) {
                                     charArr.add(lineValues[1]);
                                     fixedExperiment1_3.add(lineValues[1]);
-
-                                    // Should check if it is a digit...
                                     fixedExperiment1_3.add(lineValues[2]);
-                                    System.out.println("fixedExperiment1_3: " + fixedExperiment1_3);
-
                                 }
-
-                            } else {
-                                errors.add("The second value/capital is incorrect on line " + i);
+                            }else {
+                                errors.add("The second value/capital is incorrect in line " + i);
                             }
-
-                        } else {
-                            errors.add("The first word is not fixed on line " + i);
+                        }else {
+                            errors.add("The first word is not fixed in line " + i);
                         }
-                    } else {
-                        errors.add("Length is incorrect on line " + i);
+                    }else {
+                        errors.add("Length is incorrect in line " + i);
                     }
                     break;
-
                 case 5:
                     if (lineValues.length == 2) {
                         if (lineValues[0].equals("dependent")) {
-                            if (lineValues[1].equals("L") || lineValues[1].equals("H")
-                                    || lineValues[1].equals("A")) {
-
+                            if (lineValues[1].equals("L") || lineValues[1].equals("H") 
+                               || lineValues[1].equals("A")) {
+                                
                                 depExperiment1.add(lineValues[1]);
-                                System.out.println("depExperiment1 = " + depExperiment1);
-
-                            } else {
-                                errors.add("The second value/capital is incorrect on line " + i);
+                            }else{
+                                errors.add("The second value/capital is incorrect in line " + i);
                             }
-                        } else {
-                            errors.add("The first word is not dependent on line " + i);
+                        }else {
+                            errors.add("The first word is not dependent in line " + i);
                         }
-                    } else {
-                        errors.add("Length is incorrect on line " + i);
+                    }else {
+                        errors.add("Length is incorrect in line " + i);
                     }
-
                     break;
-
-            }// end of switch
-
-        } // end of for
-
+            }//end of switch
+        }//end of for
+        
         br.close();
 
-        // Check if the second value capital letter is not identical in the first four
-        // lines
-        if ((charArr.get(0) != charArr.get(1)) && (charArr.get(0) != charArr.get(2))
-                && (charArr.get(0) != charArr.get(3)) && (charArr.get(1) != charArr.get(2))
-                && (charArr.get(1) != charArr.get(3)) && (charArr.get(2) != charArr.get(3))) {
-
-            if (charArr.indexOf("D") == -1 || charArr.indexOf("M") == -1
-                    || charArr.indexOf("P") == -1 || charArr.indexOf("R") == -1) {
-
-                errors.add("One of variables(D/M/P/R) is missing.");
+        //Check if the second value capital letter is not identical in the first four lines 
+        for (int i = 0; i < charArr.size(); i++) {
+            for (int j = i + 1; j < charArr.size(); j++) {
+                if (charArr.get(i).equals(charArr.get(j))) {
+                    //Get the duplicate element
+                    errors.add("One of variables(D/M/P/R) is missing."); 
+                }
             }
-
-        } else {
-            errors.add("The second value-capital letters are not identical in the first four lines.");
-        }
-
-        currentIndepVar = indepExperiment1.get(0);
-        currentDepVar = depExperiment1.get(0);
-
-        switch (fixedExperiment1_1.get(0)) {
-            case "D":
-                experiment1D.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-                break;
-            case "P":
-                experiment1P.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-                break;
-            case "M":
-                experiment1M.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-                break;
-            case "R":
-                experiment1R.add(Integer.parseInt(fixedExperiment1_1.get(1)));
-                break;
-        }
-        switch (fixedExperiment1_2.get(0)) {
-            case "D":
-                experiment1D.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-                break;
-            case "P":
-                experiment1P.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-                break;
-            case "M":
-                experiment1M.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-                break;
-            case "R":
-                experiment1R.add(Integer.parseInt(fixedExperiment1_2.get(1)));
-                break;
-        }
-        switch (fixedExperiment1_3.get(0)) {
-            case "D":
-                experiment1D.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-                break;
-            case "P":
-                experiment1P.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-                break;
-            case "M":
-                experiment1M.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-                break;
-            case "R":
-                experiment1R.add(Integer.parseInt(fixedExperiment1_3.get(1)));
-                break;
         }
         checkForErrors();
     }
-
+    
     private static void checkForErrors() {
         // print any problematic lines, if there are any.
         if (!errors.isEmpty()) {
@@ -343,7 +263,7 @@ public class Main {
             System.out.println("No errors found.");
         }
     }
-
+        
     // Function to move the person, protocol 4 or 8
     private static void move(Person person, int protocol, int Dimension) {
         Person temp = new Person(person.xCoordinate, person.yCoordinate);
@@ -400,7 +320,8 @@ public class Main {
             move(person, protocol, Dimension);
         }
     }
-
+    
+    
     // This function plays the game.
     // This function actually executes the moves and gives the output.
     private static int playGame(Person person1, Person person2, int Dimension, int maxMoves, int protocol) {
@@ -431,7 +352,8 @@ public class Main {
         else
             return counter;
     }
-
+    
+    
     // This function runs the experiment and logs the outcome into a dad list.
     private static List<Integer> experiment(int Dimension, int protocol, int maxMoves, int repetitions) {
         List<Integer> data = new ArrayList<>();
@@ -444,7 +366,7 @@ public class Main {
 
         return data;
     }
-
+ 
     // This function takes the results of the experiments run in main() and
     // writes them to outputfile.txt.
     private static void outputGenerator(String currentIndepVar, String currentDepVar, ArrayList<Integer> xCoordinates,
@@ -461,99 +383,119 @@ public class Main {
         ExperimentData[] experiment1 = new ExperimentData[indepExperiment1.size() - 1];
         if (indepExperiment1.get(0).equals("D")) {
             for (int i = 1; i < indepExperiment1.size(); i++) {
-                experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
-                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                experiment1[i - 1] = new ExperimentData(
-                        currentIndepVar,
-                        currentDepVar,
-                        experiment1D.get(i - 1),
-                        experiment1P.get(0),
-                        experiment1M.get(0),
-                        experiment1R.get(0),
-                        1.0,
-                        2.0,
-                        3.0);
-                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                low = Collections.min(data);
-                high = Collections.max(data);
-                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                resultsExp1.add(low);
-                resultsExp1.add(high);
-                resultsExp1.add(average);
-
+                //Check the range of the variable
+                if ( Integer.parseInt(indepExperiment1.get(i)) < 100 
+                   && Integer.parseInt(indepExperiment1.get(i)) > 0) {
+                       experiment1D.add(Integer.parseInt(indepExperiment1.get(i)));
+                       xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                       experiment1[i - 1] = new ExperimentData(
+                               currentIndepVar,
+                               currentDepVar,
+                               experiment1D.get(i - 1),
+                               experiment1P.get(0),
+                               experiment1M.get(0),
+                               experiment1R.get(0),
+                               1.0,
+                               2.0,
+                               3.0);
+                       data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                               experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                       low = Collections.min(data);
+                       high = Collections.max(data);
+                       average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                       resultsExp1.add(low);
+                       resultsExp1.add(high);
+                       resultsExp1.add(average);
+                }else{
+                       errors.add("The dimension is not in the range (0,100) in the line 1.");
+                }
             }
         }
         if (indepExperiment1.get(0).equals("P")) {
             for (int i = 1; i < indepExperiment1.size(); i++) {
-                experiment1P.add(Integer.parseInt(indepExperiment1.get(i)));
-                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                experiment1[i - 1] = new ExperimentData(
-                        currentIndepVar,
-                        currentDepVar,
-                        experiment1D.get(0),
-                        experiment1P.get(i - 1),
-                        experiment1M.get(0),
-                        experiment1R.get(0),
-                        1.0,
-                        2.0,
-                        3.0);
-                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                low = Collections.min(data);
-                high = Collections.max(data);
-                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                resultsExp1.add(low);
-                resultsExp1.add(high);
-                resultsExp1.add(average);
+                if ( Integer.parseInt(indepExperiment1.get(i)) == 4 
+                   || Integer.parseInt(indepExperiment1.get(i)) == 8 ) {
+                       experiment1P.add(Integer.parseInt(indepExperiment1.get(i)));
+                       xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                       experiment1[i - 1] = new ExperimentData(
+                               currentIndepVar,
+                               currentDepVar,
+                               experiment1D.get(0),
+                               experiment1P.get(i - 1),
+                               experiment1M.get(0),
+                               experiment1R.get(0),
+                               1.0,
+                               2.0,
+                               3.0);
+                       data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                               experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                       low = Collections.min(data);
+                       high = Collections.max(data);
+                       average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                       resultsExp1.add(low);
+                       resultsExp1.add(high);
+                       resultsExp1.add(average);
+                }else{
+                       errors.add("The protocol should be only 4 or 8 in the line 1.");
+                }
             }
         }
         if (indepExperiment1.get(0).equals("M")) {
             for (int i = 1; i < indepExperiment1.size(); i++) {
-                experiment1M.add(Integer.parseInt(indepExperiment1.get(i)));
-                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                experiment1[i - 1] = new ExperimentData(
-                        currentIndepVar,
-                        currentDepVar,
-                        experiment1D.get(0),
-                        experiment1P.get(0),
-                        experiment1M.get(i - 1),
-                        experiment1R.get(0),
-                        1.0,
-                        2.0,
-                        3.0);
-                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                low = Collections.min(data);
-                high = Collections.max(data);
-                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                resultsExp1.add(low);
-                resultsExp1.add(high);
-                resultsExp1.add(average);
+                if ( Integer.parseInt(indepExperiment1.get(i)) <= 1000000 
+                   && Integer.parseInt(indepExperiment1.get(i)) > 0 ) {
+                       experiment1M.add(Integer.parseInt(indepExperiment1.get(i)));
+                       xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                       experiment1[i - 1] = new ExperimentData(
+                               currentIndepVar,
+                               currentDepVar,
+                               experiment1D.get(0),
+                               experiment1P.get(0),
+                               experiment1M.get(i - 1),
+                               experiment1R.get(0),
+                               1.0,
+                               2.0,
+                               3.0);
+                       data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                               experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                       low = Collections.min(data);
+                       high = Collections.max(data);
+                       average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                       resultsExp1.add(low);
+                       resultsExp1.add(high);
+                       resultsExp1.add(average);
+                }else{
+                       errors.add("The maxMoves is not in the range (0,1000000] in the line 1.");
+                }
             }
         }
         if (indepExperiment1.get(0).equals("R")) {
             for (int i = 1; i < indepExperiment1.size(); i++) {
-                experiment1R.add(Integer.parseInt(indepExperiment1.get(i)));
-                xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
-                experiment1[i - 1] = new ExperimentData(
-                        currentIndepVar,
-                        currentDepVar,
-                        experiment1D.get(0),
-                        experiment1P.get(0),
-                        experiment1M.get(0),
-                        experiment1R.get(i - 1),
-                        1.0,
-                        2.0,
-                        3.0);
-                data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
-                        experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
-                low = Collections.min(data);
-                high = Collections.max(data);
-                average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
-                resultsExp1.add(low);
-                resultsExp1.add(high);
-                resultsExp1.add(average);
+                if ( Integer.parseInt(indepExperiment1.get(i)) <= 10000 
+                   && Integer.parseInt(indepExperiment1.get(i)) > 0 ) {
+                       experiment1R.add(Integer.parseInt(indepExperiment1.get(i)));
+                       xCoordinates.add(Integer.parseInt(indepExperiment1.get(i)));
+                       experiment1[i - 1] = new ExperimentData(
+                               currentIndepVar,
+                               currentDepVar,
+                               experiment1D.get(0),
+                               experiment1P.get(0),
+                               experiment1M.get(0),
+                               experiment1R.get(i - 1),
+                               1.0,
+                               2.0,
+                               3.0);
+                       data = experiment(experiment1[i - 1].Dimension, experiment1[i - 1].protocol,
+                               experiment1[i - 1].maxMoves, experiment1[i - 1].repetitions);
+                       low = Collections.min(data);
+                       high = Collections.max(data);
+                       average = data.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+                       resultsExp1.add(low);
+                       resultsExp1.add(high);
+                       resultsExp1.add(average);
+                }else{
+                       errors.add("The repetitions is not in the range (0,10000] in the line 1.");
+                }
             }
         }
 
@@ -643,16 +585,139 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         System.out
-                .println("The program takes an input file which describes the parameters of 3 different experiments.\n"
+                .println("The program takes an input file which describes the parameters of one experiment.\n"
                         +
-                        "The program takes the input file and parses each of the parameters for the experiments, then it runs\n"
+                        "Then it should proceed by building a table with the independent variable in the leftmost column, \n"
                         +
-                        "each experiment according to those parameters.  It will take all the results, calculate the high, low,\n"
+                        "followed by columns for the fixed variables, followed by the column for the dependent variable.\n"
                         +
-                        " and average values of each experiment, then it will log those results in an output file.\n");
-
+                        "A typewriter graphics var chart is also printed to the output file.\n");
+        double low;
+        double high;
+        double average;
         parseInput();
+       
+        currentIndepVar = indepExperiment1.get(0);
+        currentDepVar = depExperiment1.get(0);
 
+        switch (fixedExperiment1_1.get(0)) {
+            case "D":
+                if ( Integer.parseInt(fixedExperiment1_1.get(1)) < 100 
+                   && Integer.parseInt(fixedExperiment1_1.get(1)) > 0) {
+                    experiment1D.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                }else {
+                    errors.add("The dimension is not in the range (0,100) in the line 2.");
+                }
+                break;
+            case "P":
+                if ( Integer.parseInt(fixedExperiment1_1.get(1)) == 4 
+                   || Integer.parseInt(fixedExperiment1_1.get(1)) == 8) {
+                    experiment1P.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                }else {
+                    errors.add("The protocol should be only 4 or 8 in the line 2.");
+                }
+                //experiment1P.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                break;
+            case "M":
+                if ( Integer.parseInt(fixedExperiment1_1.get(1)) <= 1000000 
+                   && Integer.parseInt(fixedExperiment1_1.get(1)) > 0) {
+                    experiment1M.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                }else {
+                    errors.add("The maxMoves is not in the range (0,1000000] in the line 2.");
+                }
+                //experiment1M.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                break;
+            case "R":
+                if ( Integer.parseInt(fixedExperiment1_1.get(1)) <= 10000 
+                   && Integer.parseInt(fixedExperiment1_1.get(1)) > 0) {
+                    experiment1R.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                }else {
+                    errors.add("The repetition is not in the range (0,10000] in the line 2.");
+                }
+                //experiment1R.add(Integer.parseInt(fixedExperiment1_1.get(1)));
+                break;
+        }
+        
+        switch (fixedExperiment1_2.get(0)) {
+            case "D":
+                if ( Integer.parseInt(fixedExperiment1_2.get(1)) < 100 
+                   && Integer.parseInt(fixedExperiment1_2.get(1)) > 0) {
+                    experiment1D.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                }else {
+                    errors.add("The dimension is not in the range (0,100) in the line 3.");
+                }
+                //experiment1D.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                break;
+            case "P":
+                if ( Integer.parseInt(fixedExperiment1_2.get(1)) == 4 
+                   || Integer.parseInt(fixedExperiment1_2.get(1)) == 8) {
+                    experiment1P.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                }else {
+                    errors.add("The protocol should be only 4 or 8 in the line 3.");
+                }
+                //experiment1P.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                break;
+            case "M":
+                if ( Integer.parseInt(fixedExperiment1_2.get(1)) <= 1000000 
+                   && Integer.parseInt(fixedExperiment1_2.get(1)) > 0) {
+                    experiment1M.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                }else {
+                    errors.add("The maxMoves is not in the range (0,1000000) in the line 3.");
+                }
+                //experiment1M.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                break;
+            case "R":
+                if ( Integer.parseInt(fixedExperiment1_2.get(1)) <= 10000 
+                   && Integer.parseInt(fixedExperiment1_2.get(1)) > 0) {
+                    experiment1R.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                }else {
+                    errors.add("The repetition is not in the range (0,10000] in the line 3.");
+                }
+                //experiment1R.add(Integer.parseInt(fixedExperiment1_2.get(1)));
+                break;
+        }
+        
+        switch (fixedExperiment1_3.get(0)) {
+            case "D":
+                if ( Integer.parseInt(fixedExperiment1_3.get(1)) < 100 
+                   && Integer.parseInt(fixedExperiment1_3.get(1)) > 0) {
+                    experiment1D.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                }else {
+                    errors.add("The dimension is not in the range (0,100) in the line 4.");
+                }
+                //experiment1D.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                break;
+            case "P":
+                if ( Integer.parseInt(fixedExperiment1_3.get(1)) == 4 
+                   || Integer.parseInt(fixedExperiment1_3.get(1)) == 8 ) {
+                    experiment1P.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                }else {
+                    errors.add("The protocol should be only 4 or 8 in the line 4.");
+                }
+                //experiment1P.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                break;
+            case "M":
+                if ( Integer.parseInt(fixedExperiment1_3.get(1)) <= 1000000 
+                   && Integer.parseInt(fixedExperiment1_3.get(1)) > 0 ) {
+                    experiment1M.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                }else {
+                    errors.add("The maxMoves should be only 4 or 8 in the line 4.");
+                }
+                //experiment1M.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                break;
+            case "R":
+                if ( Integer.parseInt(fixedExperiment1_3.get(1)) <= 10000 
+                   && Integer.parseInt(fixedExperiment1_3.get(1)) > 0 ) {
+                    experiment1R.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                }else {
+                    errors.add("The repetition is not the range (0, 10000] in the line 4.");
+                }
+                experiment1R.add(Integer.parseInt(fixedExperiment1_3.get(1)));
+                break;
+        }
+        
+        checkForErrors(); 
+       
         outputGenerator(currentIndepVar, currentDepVar, xCoordinates, yCoordinates);
     }
 }
